@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JobUp</title>
+<link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="scr on" id="learn">
+  <div class="top"><div class="logo">Job<b>Up</b></div><div class="top-r"><div class="badge f">🔥 7일</div><div class="badge x">⚡ 1,240</div></div></div>
+  <div class="body">
+    <div class="ltabs"><div class="lt on" onclick="ltab(this,'free')">무료 기본</div><div class="lt" onclick="ltab(this,'prem')">유료 심화</div></div>
+    <div id="freeTab">
+      <div class="sh"><span class="sh-t">직무적성 — 통합 3과목</span></div>
+      <div class="sg">
+        <div class="sb" style="--cc:var(--grn)" onclick="location.href='quiz.html?subj=lan'"><div class="sb-i">🔤</div><div class="sb-n">언어 Language</div><div class="sb-d">어휘·독해·명제·언어추리</div><div class="sb-bw"><div class="sb-bf" style="width:72%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.4 · 72%</span></div></div>
+        <div class="sb" style="--cc:var(--blu)" onclick="location.href='quiz.html?subj=num'"><div class="sb-i">🔢</div><div class="sb-n">수리 Numeracy</div><div class="sb-d">자료해석·수추리·응용계산</div><div class="sb-bw"><div class="sb-bf" style="width:55%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.3 · 55%</span></div></div>
+        <div class="sb" style="--cc:var(--pur)" onclick="location.href='quiz.html?subj=rea'"><div class="sb-i">🔀</div><div class="sb-n">추리 Reasoning</div><div class="sb-d">도형추리·공간지각·패턴</div><div class="sb-bw"><div class="sb-bf" style="width:38%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.2 · 38%</span></div></div>
+        <div class="sb" style="--cc:var(--blu)" onclick="location.href='eng.html'"><div class="sb-i">📖</div><div class="sb-n">비즈니스 영어</div><div class="sb-d">스토리 5단계 세션</div><div class="sb-bw"><div class="sb-bf" style="width:60%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.3 · 60%</span></div></div>
+        <div class="sb" style="--cc:var(--pur)" onclick="location.href='quiz.html?subj=rea'"><div class="sb-i">💻</div><div class="sb-n">IT 상식</div><div class="sb-d">AI·클라우드·보안</div><div class="sb-bw"><div class="sb-bf" style="width:21%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.1 · 21%</span><span class="sb-nw">NEW</span></div></div>
+      </div>
+    </div>
+    <div id="premTab" style="display:none">
+      <div class="ph" style="margin-top:13px" onclick="alert('구독 후 이용 가능')"><div class="ph-ic">👑</div><div class="ph-inf"><p class="ph-tag">Premium 구독</p><p class="ph-t">전체 심화 + 자격증 무제한</p><p class="ph-s">월 4,900원 · 7일 무료 체험</p></div><span class="ph-ar">›</span></div>
+      <div class="sh" style="margin-top:4px"><span class="sh-t">🏛️ 공기업 심화</span></div>
+      <div class="sg">
+        <div class="sb" style="--cc:var(--grn);opacity:.5"><div class="sb-i">📋</div><div class="sb-n">NCS 유형별 집중</div><div class="sb-d">PSAT형·모듈형</div><div class="sb-bw"><div class="sb-bf" style="width:0%"></div></div><div class="sb-ft"><span class="sb-pc">0%</span><span class="sb-lk">🔒</span></div></div>
+        <div class="sb" style="--cc:var(--grn);opacity:.5"><div class="sb-i">📜</div><div class="sb-n">한국사능력검정</div><div class="sb-d">1·2급 기출 집중</div><div class="sb-bw"><div class="sb-bf" style="width:0%"></div></div><div class="sb-ft"><span class="sb-pc">0%</span><span class="sb-lk">🔒</span></div></div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav"><button class="ni" onclick="location.href='index.html'"><span class="nico">🏠</span>홈</button><button class="ni on" onclick="location.href='learn.html'"><span class="nico">📚</span>학습</button><button class="ni" onclick="location.href='cert.html'"><span class="nico">🏅</span>자격증</button><button class="ni" onclick="location.href='league.html'"><span class="nico">🏆</span>리그</button><button class="ni" onclick="location.href='my.html'"><span class="nico">👤</span>MY</button></nav>
+</div>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>

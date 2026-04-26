@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JobUp</title>
+<link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="scr on" id="my">
+  <div class="top"><div class="logo">Job<b>Up</b></div><div class="top-r"><div class="badge f">🔥 7일</div><div class="badge x">⚡ 1,240</div></div></div>
+  <div class="body">
+    <div class="my-prof fu">
+      <div class="my-av">🐻</div>
+      <div>
+        <div class="my-nm">김준비</div>
+        <div class="my-bs"><span class="my-b t">금융권 트랙</span><span class="my-b l">🏆 브론즈 리그</span></div>
+        <div class="my-row" style="margin-top:8px">
+          <div class="my-s"><div class="my-sv">7</div><div class="my-sl">연속일</div></div>
+          <div class="my-s"><div class="my-sv">43</div><div class="my-sl">활동일</div></div>
+          <div class="my-s"><div class="my-sv">1,240</div><div class="my-sl">XP</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Garden -->
+    <div class="sh fu d1" style="margin-top:14px"><span class="sh-t">🌿 Activity Garden</span><a class="sh-m" id="shareBtn" onclick="shareGarden()">공유하기</a></div>
+    <div class="garden fu d1">
+      <div class="g-head"><span class="g-title">최근 52주 학습 기록</span><span class="g-share" onclick="shareGarden()">📤 SNS 공유</span></div>
+      <div class="g-grid" id="gardenGrid"></div>
+      <div class="g-legend"><span class="g-ll">적음</span><div class="gc-sm gc l0"></div><div class="gc-sm gc l1"></div><div class="gc-sm gc l2"></div><div class="gc-sm gc l3"></div><div class="gc-sm gc l4"></div><span class="g-ll">많음</span></div>
+      <div class="g-stats">
+        <div class="gst"><div class="gst-v">43</div><div class="gst-l">총 활동일</div></div>
+        <div class="gst"><div class="gst-v">7일</div><div class="gst-l">최장 연속</div></div>
+        <div class="gst"><div class="gst-v">1,240</div><div class="gst-l">올해 XP</div></div>
+      </div>
+    </div>
+
+    <!-- 레벨 -->
+    <div class="sh fu d2"><span class="sh-t">과목별 레벨</span></div>
+    <div class="lv-grid fu d2">
+      <div class="lv"><div class="lv-em">🔤</div><div class="lv-nm">언어</div><div class="lv-num">Lv.4</div><div class="lv-bw"><div class="lv-bf" style="width:72%"></div></div></div>
+      <div class="lv"><div class="lv-em">🔢</div><div class="lv-nm">수리</div><div class="lv-num">Lv.3</div><div class="lv-bw"><div class="lv-bf" style="width:55%"></div></div></div>
+      <div class="lv"><div class="lv-em">🔀</div><div class="lv-nm">추리</div><div class="lv-num">Lv.2</div><div class="lv-bw"><div class="lv-bf" style="width:38%"></div></div></div>
+      <div class="lv"><div class="lv-em">📖</div><div class="lv-nm">영어</div><div class="lv-num">Lv.3</div><div class="lv-bw"><div class="lv-bf" style="width:60%"></div></div></div>
+      <div class="lv"><div class="lv-em">💻</div><div class="lv-nm">IT 상식</div><div class="lv-num">Lv.1</div><div class="lv-bw"><div class="lv-bf" style="width:21%"></div></div></div>
+    </div>
+
+    <!-- MyRoom 진입 -->
+    <div class="sh fu d3"><span class="sh-t">나만의 공부방</span></div>
+    <div class="mr-btn fu d3" onclick="location.href='room.html'">
+      <div class="mr-em">🏡</div>
+      <div class="mr-inf"><div class="mr-t">MyRoom 꾸미기</div><div class="mr-s">보유 아이템 11개 · 새 아이템 3개 해제 가능!</div></div>
+      <span class="mr-ar">›</span>
+    </div>
+  </div>
+  <nav class="nav"><button class="ni" onclick="location.href='index.html'"><span class="nico">🏠</span>홈</button><button class="ni" onclick="location.href='learn.html'"><span class="nico">📚</span>학습</button><button class="ni" onclick="location.href='cert.html'"><span class="nico">🏅</span>자격증</button><button class="ni" onclick="location.href='league.html'"><span class="nico">🏆</span>리그</button><button class="ni on" onclick="location.href='None.html'"><span class="nico">👤</span>MY</button></nav>
+</div>
+
+<div class="g-tip" id="gTip"></div><div class="unlock-toast" id="uToast"></div>
+<script src="js/app.js"></script>
+</body>
+</html>

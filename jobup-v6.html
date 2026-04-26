@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JobUp — 취업 준비 올인원 플랫폼 v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0D13;--s1:#131720;--s2:#1A1F2E;--s3:#21283A;
+  --b1:#252D42;--b2:#2E3855;
+  --grn:#27D98A;--grn2:rgba(39,217,138,.13);--grn3:rgba(39,217,138,.06);
+  --blu:#4B96FF;--blu2:rgba(75,150,255,.13);
+  --gld:#F4C430;--gld2:rgba(244,196,48,.13);
+  --pur:#9D7FFF;--pur2:rgba(157,127,255,.14);
+  --red:#FF5C5C;--red2:rgba(255,92,92,.12);
+  --org:#FF8A3D;
+  --tx1:#EEF2FF;--tx2:#8A95B3;--tx3:#4A536B;
+  --r:16px;--rs:11px;--rxs:7px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx1);font-family:'Noto Sans KR',sans-serif;overflow-x:hidden;font-size:14px;line-height:1.5;min-height:100dvh}
+
+/* ─ screens ─ */
+.scr{display:none;flex-direction:column;min-height:100dvh}
+.scr.on{display:flex}
+.body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:78px}
+
+/* ─ topbar ─ */
+.top{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;padding:13px 20px 11px;backdrop-filter:blur(8px)}
+.logo{font-family:'Gmarket Sans';font-weight:700;font-size:22px;color:var(--grn);letter-spacing:-.5px}
+.logo b{color:var(--tx1);font-weight:700}
+.top-r{display:flex;gap:9px;align-items:center}
+.badge{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700}
+.badge.f{color:var(--org)}.badge.x{color:var(--gld)}
+
+/* ─ bottom nav ─ */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--s1);border-top:1px solid var(--b1);display:flex;padding:9px 0 max(9px,env(safe-area-inset-bottom))}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--tx3);font-size:10px;font-family:'Gmarket Sans';padding:3px 0;transition:color .14s}
+.ni.on{color:var(--grn)}
+.nico{font-size:19px;line-height:1}
+
+/* ─ onboarding ─ */
+#ob .body{padding-bottom:0}
+.ob-wrap{display:flex;flex-direction:column;padding:50px 26px 34px;min-height:100dvh}
+.ob-slides{display:flex;transition:transform .36s cubic-bezier(.4,0,.2,1)}
+.ob-sl{min-width:100vw;display:flex;flex-direction:column}
+.ob-em{font-size:66px;margin-bottom:22px;display:block}
+.ob-kw{display:inline-flex;align-items:center;gap:5px;background:var(--grn2);color:var(--grn);font-size:11px;font-weight:700;letter-spacing:.5px;padding:5px 12px;border-radius:20px;margin-bottom:16px;width:fit-content}
+.ob-h{font-family:'Gmarket Sans';font-size:28px;font-weight:700;line-height:1.3;margin-bottom:12px}
+.ob-h .hl{color:var(--grn)}
+.ob-p{font-size:14px;color:var(--tx2);line-height:1.8;flex:1}
+.ob-pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+.pill{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid}
+.pill.g{border-color:var(--grn);color:var(--grn);background:var(--grn2)}
+.pill.b{border-color:var(--blu);color:var(--blu);background:var(--blu2)}
+.pill.d{border-color:var(--gld);color:var(--gld);background:var(--gld2)}
+.ob-bot{display:flex;flex-direction:column;gap:8px;padding-top:26px}
+.ob-dots{display:flex;gap:5px;justify-content:center;margin-bottom:3px}
+.dot{width:8px;height:8px;border-radius:4px;background:var(--b2);transition:all .28s}
+.dot.on{background:var(--grn);width:24px}
+.ob-btn{width:100%;padding:14px;background:var(--grn);color:#071C10;font-size:15px;font-weight:700;font-family:'Gmarket Sans';border:none;border-radius:var(--rs);cursor:pointer;transition:transform .1s,opacity .12s}
+.ob-btn:active{transform:scale(.97);opacity:.85}
+.ob-skip{background:none;border:none;color:var(--tx3);font-size:13px;cursor:pointer;text-align:center;padding:7px}
+
+/* ─ section head ─ */
+.sh{display:flex;align-items:baseline;justify-content:space-between;padding:18px 20px 9px}
+.sh-t{font-family:'Gmarket Sans';font-size:15px;font-weight:700}
+.sh-m{font-size:12px;color:var(--grn);cursor:pointer}
+
+/* ─ home hero ─ */
+.hero{margin:13px 20px 0;background:linear-gradient(135deg,#0D2135,#0B0D13);border:1px solid var(--b2);border-radius:var(--r);padding:16px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(39,217,138,.06) 0%,transparent 70%);pointer-events:none}
+.hero-g{font-size:12px;color:var(--tx2);margin-bottom:3px}
+.hero-g strong{color:var(--grn)}
+.hero-t{font-family:'Gmarket Sans';font-size:17px;font-weight:700;line-height:1.35;margin-bottom:12px}
+.drow{display:flex;align-items:center;gap:12px}
+.ring{position:relative;width:58px;height:58px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.rbg{fill:none;stroke:var(--b2);stroke-width:5}
+.rfg{fill:none;stroke:var(--grn);stroke-width:5;stroke-linecap:round;stroke-dasharray:157;stroke-dashoffset:52;transition:stroke-dashoffset 1.2s ease}
+.rn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--grn);line-height:1}
+.rn small{font-size:9px;color:var(--tx3);margin-top:1px}
+.dtask{flex:1;display:flex;flex-direction:column;gap:5px}
+.tr{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx2)}
+.td{width:7px;height:7px;border-radius:50%;background:var(--b1);flex-shrink:0}
+.tr.ok .td{background:var(--grn)}.tr.ok{color:var(--tx1)}
+
+/* ─ free scroll ─ */
+.fsc{display:flex;gap:10px;padding:4px 20px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.fsc::-webkit-scrollbar{display:none}
+.fc{scroll-snap-align:start;flex-shrink:0;width:145px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:13px;cursor:pointer;position:relative;overflow:hidden;transition:transform .13s}
+.fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cc,var(--grn))}
+.fc:active{transform:scale(.96)}
+.f-ic{font-size:22px;margin-bottom:6px}
+.f-nm{font-size:13px;font-weight:700;margin-bottom:3px;line-height:1.3}
+.f-ds{font-size:10px;color:var(--tx3);margin-bottom:8px;line-height:1.4}
+.f-bw{height:4px;background:var(--b1);border-radius:2px;overflow:hidden}
+.f-bf{height:100%;background:var(--cc,var(--grn));border-radius:2px}
+.f-pc{font-size:10px;color:var(--tx3);margin-top:3px;text-align:right}
+
+/* ─ track banner ─ */
+.tb{margin:4px 20px 0;border-radius:var(--r);padding:15px 17px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:transform .13s;position:relative;overflow:hidden;border:1px solid}
+.tb:active{transform:scale(.98)}
+.tb.pub{background:linear-gradient(135deg,#0D2018,#0B0D13);border-color:#1B3E26}
+.tb.corp{background:linear-gradient(135deg,#0D1A30,#0B0D13);border-color:#1B3050}
+.tb.fin{background:linear-gradient(135deg,#201B00,#0B0D13);border-color:#3E3200}
+.tb-i{font-size:26px;flex-shrink:0}
+.tb-inf{flex:1}
+.tb-tag{font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:3px;text-transform:uppercase}
+.tb.pub .tb-tag{color:var(--grn)}.tb.corp .tb-tag{color:var(--blu)}.tb.fin .tb-tag{color:var(--gld)}
+.tb-t{font-family:'Gmarket Sans';font-size:14px;font-weight:700;margin-bottom:2px}
+.tb-s{font-size:11px;color:var(--tx2)}
+.tb-ar{font-size:17px}
+.tb.pub .tb-ar{color:var(--grn)}.tb.corp .tb-ar{color:var(--blu)}.tb.fin .tb-ar{color:var(--gld)}
+
+/* ─ league ─ */
+.ls{margin:0 20px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden}
+.lr{display:flex;align-items:center;padding:11px 15px;gap:11px;border-bottom:1px solid var(--b1)}
+.lr:last-child{border-bottom:none}.lr.me{background:rgba(39,217,138,.04)}
+.rn2{font-size:12px;font-weight:700;color:var(--tx3);width:20px;text-align:center}
+.rn2.g{color:#FFD700}.rn2.s{color:#C0C0C0}.rn2.b{color:#CD7F32}
+.rav{width:32px;height:32px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ri{flex:1}.rnam{font-size:13px;font-weight:600}.rsub{font-size:11px;color:var(--tx3)}
+.rxp{font-size:13px;font-weight:700;color:var(--gld)}
+
+/* ─ learn tabs ─ */
+.ltabs{display:flex;padding:13px 20px 0}
+.lt{flex:1;padding:9px 0;text-align:center;font-size:13px;font-weight:700;font-family:'Gmarket Sans';border-bottom:2px solid transparent;color:var(--tx3);cursor:pointer;transition:all .14s}
+.lt.on{color:var(--grn);border-bottom-color:var(--grn)}
+
+/* ─ subject grid ─ */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:13px 20px}
+.sb{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:15px 13px;cursor:pointer;transition:transform .13s;position:relative;overflow:hidden}
+.sb::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cc,var(--grn))}
+.sb:active{transform:scale(.97)}
+.sb-i{font-size:22px;margin-bottom:7px}
+.sb-n{font-size:13px;font-weight:700;margin-bottom:3px;line-height:1.3}
+.sb-d{font-size:10px;color:var(--tx3);margin-bottom:7px;line-height:1.4}
+.sb-bw{height:4px;background:var(--b1);border-radius:2px;overflow:hidden}
+.sb-bf{height:100%;background:var(--cc,var(--grn));border-radius:2px}
+.sb-ft{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.sb-pc{font-size:10px;color:var(--tx3)}
+.sb-lk{font-size:11px;color:var(--tx3)}
+.sb-nw{background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:10px}
+
+/* ─ prem header ─ */
+.ph{margin:5px 20px 0;background:linear-gradient(135deg,#1D1600,#251C00);border:1px solid #3D2F00;border-radius:var(--r);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.ph-ic{font-size:25px}
+.ph-inf{flex:1}
+.ph-tag{font-size:10px;font-weight:700;color:#C9A030;letter-spacing:.5px;margin-bottom:3px}
+.ph-t{font-family:'Gmarket Sans';font-size:14px;font-weight:700;margin-bottom:2px}
+.ph-s{font-size:11px;color:var(--tx2)}
+.ph-ar{color:#C9A030;font-size:19px}
+
+/* ─ ENGLISH STORY ─ */
+#eng{background:var(--bg)}
+.eng-top{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--b1)}
+.eng-x{background:none;border:none;color:var(--tx2);font-size:22px;cursor:pointer}
+.eng-pb-w{flex:1;height:8px;background:var(--s2);border-radius:4px;overflow:hidden}
+.eng-pb{height:100%;background:var(--grn);border-radius:4px;transition:width .45s ease}
+.eng-sl{font-size:12px;font-weight:700;color:var(--grn);font-family:'Gmarket Sans';white-space:nowrap}
+
+.step-bar{display:flex;gap:4px;justify-content:center;padding:10px 20px 14px}
+.step-dot{flex:1;height:6px;border-radius:3px;background:var(--b2);transition:all .3s;max-width:50px}
+.step-dot.on{background:var(--grn)}
+.step-dot.dn{background:rgba(39,217,138,.35)}
+
+/* story card */
+.story-card{margin:0 20px 14px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:18px}
+.story-label{font-size:10px;font-weight:700;color:var(--blu);letter-spacing:.8px;margin-bottom:8px}
+.story-title{font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.4}
+.story-text{font-size:13px;color:var(--tx2);line-height:1.9}
+.hl-word{color:var(--grn);font-weight:700;border-bottom:1px dashed var(--grn);cursor:pointer}
+
+/* vocab */
+.vocab-hint{margin:0 20px 11px;font-size:13px;color:var(--tx2);text-align:center}
+.vocab-area{display:flex;flex-direction:column;gap:9px;padding:0 20px}
+.v-row{display:flex;align-items:center;gap:8px}
+.v-w{flex:1;padding:11px 12px;background:var(--s1);border:2px solid var(--b1);border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;transition:all .14s;text-align:center}
+.v-w.sel{border-color:var(--blu);background:var(--blu2);color:var(--blu)}
+.v-w.ok{border-color:var(--grn);background:var(--grn2);color:var(--grn);pointer-events:none}
+.v-w.ng{border-color:var(--red);background:var(--red2);animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.v-arr{color:var(--tx3);font-size:15px;flex-shrink:0}
+.v-d{flex:1.6;padding:11px 12px;background:var(--s2);border:2px solid var(--b1);border-radius:var(--rs);font-size:12px;color:var(--tx2);cursor:pointer;transition:all .14s;text-align:center;line-height:1.5}
+.v-d.sel{border-color:var(--pur);background:var(--pur2);color:var(--pur)}
+.v-d.ok{border-color:var(--grn);background:var(--grn2);color:var(--grn);pointer-events:none}
+
+/* fill blank */
+.blank-sent{margin:0 20px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rs);padding:14px;font-size:14px;line-height:1.9;text-align:center}
+.blank{display:inline-block;min-width:80px;border-bottom:2px solid var(--grn);color:var(--grn);font-weight:700;text-align:center;padding:0 4px}
+.blank-opts{display:flex;flex-direction:column;gap:8px;padding:0 20px}
+.blank-opt{background:var(--s1);border:2px solid var(--b1);border-radius:var(--rs);padding:11px 14px;text-align:center;cursor:pointer;font-size:14px;font-weight:600;transition:all .14s}
+.blank-opt.sel{border-color:var(--blu);background:var(--blu2);color:var(--blu)}
+.blank-opt.ok{border-color:var(--grn);background:var(--grn2);color:var(--grn)}
+.blank-opt.ng{border-color:var(--red);background:var(--red2)}
+
+/* listening */
+.listen-card{margin:0 20px 13px;background:var(--blu2);border:1px solid rgba(75,150,255,.25);border-radius:var(--rs);padding:14px;font-size:14px;font-weight:700;text-align:center;line-height:1.7;min-height:48px;color:var(--tx1)}
+.play-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--blu2);border:1px solid rgba(75,150,255,.3);border-radius:var(--rs);padding:10px 18px;cursor:pointer;margin:0 auto 14px;font-size:13px;font-weight:700;color:var(--blu);font-family:'Gmarket Sans';width:fit-content;transition:all .13s}
+.play-btn:active{transform:scale(.96)}
+.play-btn.slow{font-size:11px;color:var(--tx3);background:transparent;border-color:var(--b1)}
+.slots{display:flex;flex-wrap:wrap;gap:6px;padding:0 20px 12px;min-height:44px}
+.slot{padding:7px 12px;background:var(--grn2);border:1px solid var(--grn);border-radius:var(--rxs);font-size:13px;font-weight:700;color:var(--grn);cursor:pointer;transition:all .13s}
+.slot:active{opacity:.7}
+.wbank{display:flex;flex-wrap:wrap;gap:7px;padding:0 20px 12px}
+.wc{padding:8px 13px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rxs);font-size:13px;font-weight:600;cursor:pointer;transition:all .13s}
+.wc:active{transform:scale(.94)}
+.wc.used{opacity:.25;pointer-events:none;text-decoration:line-through}
+
+/* speaking */
+.speak-txt{margin:0 20px 14px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rs);padding:15px;font-size:15px;font-weight:700;text-align:center;line-height:1.7}
+.mic-area{display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 20px 12px}
+.mic-btn{width:82px;height:82px;border-radius:50%;background:var(--grn2);border:3px solid var(--grn);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;transition:all .2s}
+.mic-btn:active,.mic-btn.rec{background:var(--red2);border-color:var(--red);animation:pulse .7s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.07)}100%{transform:scale(1)}}
+.mic-score{font-family:'Gmarket Sans';font-size:13px;color:var(--tx2);text-align:center}
+.mic-score strong{color:var(--grn);font-size:20px}
+.skip-txt{font-size:12px;color:var(--tx3);cursor:pointer;text-decoration:underline;text-align:center}
+
+/* writing */
+.write-sit{margin:0 20px 11px;background:var(--gld2);border:1px solid rgba(244,196,48,.22);border-radius:var(--rs);padding:13px 15px}
+.ws-lbl{font-size:10px;font-weight:700;color:var(--gld);letter-spacing:.5px;margin-bottom:5px}
+.ws-txt{font-size:13px;color:var(--tx2);line-height:1.7}
+.write-box{margin:0 20px;border:2px solid var(--b1);border-radius:var(--rs);background:var(--s1);padding:13px;transition:border-color .2s}
+.write-box:focus-within{border-color:var(--grn)}
+.write-box textarea{width:100%;background:none;border:none;outline:none;color:var(--tx1);font-size:13px;font-family:'Noto Sans KR';line-height:1.7;resize:none;min-height:84px}
+.wc-count{font-size:11px;color:var(--tx3);text-align:right;padding:4px 20px 0}
+.wc-count.ok{color:var(--grn);font-weight:700}
+.write-fb{margin:11px 20px 0;background:var(--grn2);border:1px solid rgba(39,217,138,.22);border-radius:var(--rs);padding:12px 14px;display:none}
+.write-fb.on{display:block}
+.wfb-t{font-size:13px;font-weight:700;color:var(--grn);margin-bottom:4px}
+.wfb-b{font-size:12px;color:var(--tx2);line-height:1.7}
+
+/* result banner */
+.rbanner{display:none;margin:11px 20px 0;border-radius:var(--rxs);padding:12px 14px;border:1px solid}
+.rbanner.ok{display:block;background:var(--grn2);border-color:var(--grn)}
+.rbanner.ng{display:block;background:var(--red2);border-color:var(--red)}
+.rb-t{font-size:13px;font-weight:700;margin-bottom:3px}
+.ok .rb-t{color:var(--grn)}.ng .rb-t{color:var(--red)}
+.rb-b{font-size:12px;color:var(--tx2);line-height:1.65}
+
+/* session footer */
+.sfoot{position:fixed;bottom:0;left:0;right:0;padding:12px 20px max(12px,env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--b1)}
+.scta{width:100%;padding:14px;background:var(--grn);color:#071C10;font-size:15px;font-weight:700;font-family:'Gmarket Sans';border:none;border-radius:var(--rs);cursor:pointer;transition:transform .1s,background .14s}
+.scta:disabled{background:var(--s2);color:var(--tx3)}
+.scta:not(:disabled):active{transform:scale(.98)}
+
+/* ─ CERT ─ */
+#cert{background:var(--bg)}
+.ctabs{display:flex;gap:6px;padding:12px 20px 5px;overflow-x:auto;scrollbar-width:none}
+.ctabs::-webkit-scrollbar{display:none}
+.ctab{flex-shrink:0;padding:7px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:20px;font-size:12px;font-weight:700;color:var(--tx3);cursor:pointer;white-space:nowrap;transition:all .14s}
+.ctab.on{background:var(--grn);color:#071C10;border-color:var(--grn)}
+.clist{display:flex;flex-direction:column;gap:11px;padding:5px 20px}
+.cc{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:transform .13s;position:relative}
+.cc:active{transform:scale(.99)}
+.cc-top{display:flex;align-items:flex-start;gap:12px;padding:14px}
+.cc-thumb{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
+.cc-info{flex:1;min-width:0}
+.cc-nm{font-family:'Gmarket Sans';font-size:14px;font-weight:700;margin-bottom:2px}
+.cc-org{font-size:11px;color:var(--tx3);margin-bottom:5px}
+.cc-tags{display:flex;gap:4px;flex-wrap:wrap}
+.ct{font-size:10px;padding:2px 7px;border-radius:10px;border:1px solid;font-weight:700}
+.ct.easy{border-color:var(--grn);color:var(--grn)}.ct.mid{border-color:var(--gld);color:var(--gld)}.ct.hard{border-color:var(--red);color:var(--red)}.ct.cat{border-color:var(--b2);color:var(--tx3)}
+.cc-dd{font-size:11px;font-weight:700;color:var(--blu);background:var(--blu2);padding:3px 8px;border-radius:20px;flex-shrink:0}
+.cc-bot{border-top:1px solid var(--b1);padding:9px 14px;display:flex;align-items:center;justify-content:space-between}
+.cc-stats{display:flex;gap:11px}
+.cst{font-size:11px;color:var(--tx3)}
+.cst strong{color:var(--tx2)}
+.cc-pr{display:flex;align-items:center;gap:7px}
+.cpn{font-family:'Gmarket Sans';font-size:14px;font-weight:700}
+.cpn.owned{color:var(--grn)}
+.cbtn{padding:6px 12px;border-radius:20px;border:none;font-size:12px;font-weight:700;font-family:'Gmarket Sans';cursor:pointer;transition:all .14s}
+.cbtn.buy{background:var(--grn);color:#071C10}.cbtn.sub{background:linear-gradient(135deg,#3D2F00,#2C2200);color:#C9A030;border:1px solid #4A3800}.cbtn.owned{background:transparent;border:1px solid var(--grn);color:var(--grn)}
+.sbadge2{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#C9A030,#F5D060);color:#1C1500;font-size:9px;font-weight:700;padding:3px 7px;border-radius:10px}
+.cprog-w{padding:0 14px 10px}
+.cpb{height:5px;background:var(--b1);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.cpbf{height:100%;background:var(--grn);border-radius:3px}
+.cpl{font-size:10px;color:var(--tx3);display:flex;justify-content:space-between}
+
+/* ─ MY PAGE ─ */
+#my{background:var(--bg)}
+.my-prof{margin:13px 20px 0;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:13px}
+.my-av{width:54px;height:54px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0;border:2px solid var(--grn)}
+.my-nm{font-family:'Gmarket Sans';font-size:16px;font-weight:700;margin-bottom:4px}
+.my-bs{display:flex;gap:5px;flex-wrap:wrap}
+.my-b{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;border:1px solid}
+.my-b.t{border-color:var(--gld);color:var(--gld);background:var(--gld2)}.my-b.l{border-color:var(--pur);color:var(--pur);background:var(--pur2)}
+.my-row{display:flex;gap:0;margin-top:8px}
+.my-s{flex:1;text-align:center}
+.my-sv{font-family:'Gmarket Sans';font-size:16px;font-weight:700;color:var(--grn)}
+.my-sl{font-size:10px;color:var(--tx3)}
+
+/* garden */
+.garden{margin:0 20px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:15px}
+.g-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.g-title{font-family:'Gmarket Sans';font-size:13px;font-weight:700}
+.g-share{font-size:11px;color:var(--grn);cursor:pointer}
+.g-grid{display:grid;grid-template-columns:repeat(52,1fr);gap:2px;width:100%}
+.gc{width:100%;aspect-ratio:1;border-radius:1px;cursor:pointer;transition:opacity .13s}
+.gc:hover{opacity:.7}
+.gc.l0{background:var(--b2)}.gc.l1{background:#1b4a30}.gc.l2{background:#1f6b40}.gc.l3{background:#24934e}.gc.l4{background:var(--grn)}
+.g-legend{display:flex;align-items:center;gap:4px;margin-top:7px;justify-content:flex-end}
+.g-ll{font-size:10px;color:var(--tx3)}
+.gc-sm{width:9px;height:9px;border-radius:1px}
+.g-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gst{background:var(--s2);border-radius:var(--rxs);padding:10px;text-align:center}
+.gst-v{font-family:'Gmarket Sans';font-size:15px;font-weight:700;color:var(--grn)}
+.gst-l{font-size:10px;color:var(--tx3);margin-top:2px}
+
+/* tooltip */
+.g-tip{position:fixed;background:var(--s3);border:1px solid var(--b2);border-radius:var(--rxs);padding:8px 12px;font-size:12px;z-index:200;pointer-events:none;max-width:220px;line-height:1.5;display:none}
+.g-tip strong{color:var(--grn)}
+
+/* levels */
+.lv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 20px}
+.lv{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rs);padding:12px;text-align:center}
+.lv-em{font-size:20px;margin-bottom:5px}
+.lv-nm{font-size:11px;color:var(--tx2);margin-bottom:3px}
+.lv-num{font-family:'Gmarket Sans';font-size:17px;font-weight:700;color:var(--grn)}
+.lv-bw{height:4px;background:var(--b1);border-radius:2px;overflow:hidden;margin-top:5px}
+.lv-bf{height:100%;background:var(--grn);border-radius:2px}
+
+/* myroom entry btn */
+.mr-btn{margin:0 20px;background:linear-gradient(135deg,#180F2C,#0F0B18);border:1px solid rgba(157,127,255,.25);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:transform .13s}
+.mr-btn:active{transform:scale(.98)}
+.mr-em{font-size:28px}
+.mr-inf{flex:1}
+.mr-t{font-family:'Gmarket Sans';font-size:14px;font-weight:700;margin-bottom:2px}
+.mr-s{font-size:11px;color:var(--tx3)}
+.mr-ar{color:var(--pur);font-size:18px}
+
+/* ─ MY ROOM ─ */
+#room{background:var(--bg)}
+.room-top{position:sticky;top:0;z-index:60;background:var(--bg);border-bottom:1px solid var(--b1);padding:13px 20px 11px;display:flex;align-items:center;gap:11px}
+.room-bk{background:none;border:none;color:var(--tx2);font-size:22px;cursor:pointer;padding:2px}
+.room-t{font-family:'Gmarket Sans';font-size:15px;font-weight:700;flex:1}
+.room-eb{font-size:12px;color:var(--pur);font-weight:700;background:var(--pur2);border:1px solid rgba(157,127,255,.22);padding:5px 12px;border-radius:20px;cursor:pointer;font-family:'Gmarket Sans'}
+
+/* isometric room canvas */
+.iso-wrap{margin:13px 20px 0;background:linear-gradient(160deg,#080B18 0%,#0C0F1E 100%);border:1px solid var(--b2);border-radius:var(--r);overflow:hidden;position:relative;user-select:none}
+.iso-wrap svg{display:block;width:100%;height:auto}
+/* clickable iso items */
+.iso-item{cursor:pointer;transition:filter .18s,opacity .15s}
+.iso-item:hover .iso-top,.iso-item:hover .iso-left,.iso-item:hover .iso-right{filter:brightness(1.22)}
+.iso-item:active{opacity:.75}
+.iso-glow{filter:drop-shadow(0 0 7px rgba(39,217,138,.55))}
+
+/* item tooltip */
+.iso-tip{position:absolute;background:rgba(15,18,35,.95);border:1px solid var(--pur);border-radius:8px;padding:7px 12px;font-size:12px;color:var(--tx1);font-weight:600;pointer-events:none;white-space:nowrap;z-index:20;opacity:0;transition:opacity .2s;top:0;left:0}
+.iso-tip.show{opacity:1}
+
+/* item drawer */
+.item-draw{margin:11px 20px 0;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden}
+.draw-tabs{display:flex;border-bottom:1px solid var(--b1)}
+.dtab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;font-family:'Gmarket Sans';color:var(--tx3);cursor:pointer;transition:all .14s;border-bottom:2px solid transparent}
+.dtab.on{color:var(--pur);border-bottom-color:var(--pur)}
+.item-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}
+.ic{background:var(--s2);border:1px solid var(--b1);border-radius:var(--rs);padding:10px;text-align:center;cursor:pointer;position:relative;transition:all .14s}
+.ic:active{transform:scale(.93)}
+.ic.locked{opacity:.4;pointer-events:none}
+.ic.eq{border-color:var(--pur);background:var(--pur2)}
+.ic-em{font-size:22px;margin-bottom:4px}
+.ic-nm{font-size:9px;color:var(--tx3);line-height:1.3}
+.ic-lk{position:absolute;top:4px;right:5px;font-size:9px}
+
+/* unlock notification */
+.unlock-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--pur);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:300;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap}
+.unlock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ─ QUIZ ─ */
+#quiz{background:var(--bg)}
+.q-subj-tabs{display:flex;gap:7px;padding:12px 20px 4px;overflow-x:auto;scrollbar-width:none}
+.q-subj-tabs::-webkit-scrollbar{display:none}
+.q-stab{flex-shrink:0;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid;cursor:pointer;transition:all .14s;white-space:nowrap}
+.q-stab.lan{border-color:var(--grn);color:var(--grn);background:var(--grn3)}
+.q-stab.num{border-color:var(--blu);color:var(--blu);background:var(--blu2)}
+.q-stab.rea{border-color:var(--pur);color:var(--pur);background:var(--pur2)}
+.q-stab.on{color:#071C10!important}
+.q-stab.lan.on{background:var(--grn)}.q-stab.num.on{background:var(--blu)}.q-stab.rea.on{background:var(--pur)}
+.q-top{display:flex;align-items:center;gap:11px;padding:11px 20px}
+.qcl{background:none;border:none;color:var(--tx2);font-size:22px;cursor:pointer}
+.qpw{flex:1;height:8px;background:var(--s2);border-radius:4px;overflow:hidden}
+.qpf{height:100%;border-radius:4px;transition:width .4s ease}
+.qpf.lan{background:var(--grn)}.qpf.num{background:var(--blu)}.qpf.rea{background:var(--pur)}
+.q-hearts{display:flex;gap:3px}
+.ht{font-size:15px}.ht.lost{filter:grayscale(1) opacity(.28)}
+.q-badge{margin:0 20px 11px;display:inline-flex;align-items:center;gap:5px;background:var(--s1);border:1px solid var(--b1);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--tx2)}
+.q-card{margin:0 20px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:17px}
+.q-type{font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:7px}
+.q-type.lan{color:var(--grn)}.q-type.num{color:var(--blu)}.q-type.rea{color:var(--pur)}
+.q-text{font-size:15px;font-weight:700;line-height:1.5}
+.q-pass{margin:0 20px 11px;background:var(--s2);border-left:3px solid var(--blu);border-radius:0 var(--rxs) var(--rxs) 0;padding:11px 13px;font-size:13px;color:var(--tx2);line-height:1.8}
+.q-opts{display:flex;flex-direction:column;gap:8px;padding:0 20px}
+.opt{background:var(--s1);border:2px solid var(--b1);border-radius:var(--rs);padding:11px 13px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;color:var(--tx1);font-size:14px;font-family:'Noto Sans KR';transition:all .14s}
+.opt.sel.lan{border-color:var(--grn);background:var(--grn2)}
+.opt.sel.num{border-color:var(--blu);background:var(--blu2)}
+.opt.sel.rea{border-color:var(--pur);background:var(--pur2)}
+.opt.correct{border-color:var(--grn);background:var(--grn2)}
+.opt.wrong{border-color:var(--red);background:var(--red2)}
+.onum{width:25px;height:25px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--tx3);flex-shrink:0;transition:all .14s}
+.opt.correct .onum{background:var(--grn);color:#071C10}
+.opt.wrong .onum{background:var(--red);color:#fff}
+.q-foot{position:fixed;bottom:0;left:0;right:0;padding:12px 20px max(12px,env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--b1)}
+.qsub{width:100%;padding:13px;font-size:15px;font-weight:700;font-family:'Gmarket Sans';border:none;border-radius:var(--rs);cursor:pointer;transition:all .1s}
+.qsub.lan{background:var(--grn);color:#071C10}.qsub.num{background:var(--blu);color:#fff}.qsub.rea{background:var(--pur);color:#fff}
+.qsub:disabled{background:var(--s2)!important;color:var(--tx3)!important}
+
+/* ─ COMPLETE ─ */
+#complete{justify-content:center;align-items:center;padding:36px 22px;text-align:center}
+.comp-em{font-size:60px;margin-bottom:12px;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(0);opacity:0}65%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+.comp-t{font-family:'Gmarket Sans';font-size:23px;font-weight:700;margin-bottom:5px}
+.comp-s{font-size:14px;color:var(--tx2);margin-bottom:22px}
+.xpc{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);padding:15px;width:100%;max-width:320px;margin-bottom:13px}
+.xpr{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--b1);font-size:14px}
+.xpr:last-child{border-bottom:none}
+.xpl{color:var(--tx2)}.xpv{font-weight:700;color:var(--gld)}
+.comp-cta{width:100%;max-width:320px;padding:13px;background:var(--grn);color:#071C10;border:none;border-radius:var(--rs);font-size:15px;font-weight:700;font-family:'Gmarket Sans';cursor:pointer;margin-bottom:9px}
+.comp-sec{background:none;border:none;font-size:12px;color:var(--tx3);cursor:pointer;text-decoration:underline}
+
+/* ─ utils ─ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .36s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}.d5{animation-delay:.25s}
+</style>
+</head>
+<body>
+
+<!-- ═══ ONBOARDING ═══ -->
+<div class="scr on" id="ob">
+<div class="body" style="padding-bottom:0">
+<div class="ob-wrap">
+  <div id="ob-slides" class="ob-slides">
+    <div class="ob-sl">
+      <span class="ob-em">🚀</span>
+      <div class="ob-kw">✦ 취업 준비의 새로운 기준</div>
+      <h1 class="ob-h">매일 <span class="hl">15분</span>,<br>합격을 앞당기세요</h1>
+      <p class="ob-p">언어·수리·추리 직무적성, 스토리 영어 5단계, IT 상식을 매일 15분으로 훈련합니다. 잔디와 MyRoom으로 동기를 지속합니다.</p>
+      <div class="ob-bot">
+        <div class="ob-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <button class="ob-btn" onclick="nextOb()">다음</button>
+        <button class="ob-skip" onclick="go('home')">건너뛰기</button>
+      </div>
+    </div>
+    <div class="ob-sl">
+      <span class="ob-em">🎯</span>
+      <div class="ob-kw">✦ 3가지 취업 트랙</div>
+      <h1 class="ob-h">목표에 맞는<br><span class="hl">맞춤 심화 트랙</span></h1>
+      <p class="ob-p">공기업·대기업·금융권 중 목표를 선택하면 맞춤형 심화 커리큘럼을 제공합니다.</p>
+      <div class="ob-pills">
+        <span class="pill g">🏛️ 공기업 트랙</span>
+        <span class="pill b">🏢 대기업 트랙</span>
+        <span class="pill d">💳 금융권 트랙</span>
+      </div>
+      <div class="ob-bot">
+        <div class="ob-dots"><div class="dot"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+        <button class="ob-btn" onclick="nextOb()">다음</button>
+        <button class="ob-skip" onclick="go('home')">건너뛰기</button>
+      </div>
+    </div>
+    <div class="ob-sl">
+      <span class="ob-em">🌿</span>
+      <div class="ob-kw">✦ GitHub 잔디 차용</div>
+      <h1 class="ob-h">매일의 학습이<br><span class="hl">잔디로 남는다</span></h1>
+      <p class="ob-p">하루도 빠짐없이 학습하면 초록 잔디가 가득 찹니다. 1년 뒤 나의 노력을 눈으로 확인하세요. SNS 공유로 취준 동료들과 함께합니다.</p>
+      <div class="ob-bot">
+        <div class="ob-dots"><div class="dot"></div><div class="dot"></div><div class="dot on"></div><div class="dot"></div></div>
+        <button class="ob-btn" onclick="nextOb()">다음</button>
+        <button class="ob-skip" onclick="go('home')">건너뛰기</button>
+      </div>
+    </div>
+    <div class="ob-sl">
+      <span class="ob-em">🏡</span>
+      <div class="ob-kw">✦ 싸이월드 MyRoom 차용</div>
+      <h1 class="ob-h">레벨업하면<br><span class="hl">내 방을 꾸민다</span></h1>
+      <p class="ob-p">학습 성취에 따라 가상 공부방 아이템이 잠금 해제됩니다. 합격 증서 액자, 금빛 트로피가 기다립니다.</p>
+      <div class="ob-bot">
+        <div class="ob-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot on"></div></div>
+        <button class="ob-btn" onclick="go('home')">학습 시작하기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<div class="scr" id="home">
+  <div class="top"><div class="logo">Job<b>Up</b></div><div class="top-r"><div class="badge f">🔥 7일</div><div class="badge x">⚡ 1,240</div></div></div>
+  <div class="body">
+    <div class="hero fu">
+      <p class="hero-g">안녕하세요, <strong>김준비</strong> 님 👋</p>
+      <h2 class="hero-t">오늘도 한 걸음,<br>합격에 가까워지세요</h2>
+      <div class="drow">
+        <div class="ring"><svg width="58" height="58" viewBox="0 0 58 58"><circle class="rbg" cx="29" cy="29" r="24"/><circle class="rfg" cx="29" cy="29" r="24"/></svg><div class="rn">2<small>/3</small></div></div>
+        <div class="dtask">
+          <div class="tr ok"><span class="td"></span>직무적성 (언어·수리·추리) ✓</div>
+          <div class="tr ok"><span class="td"></span>비즈니스 영어 스토리 ✓</div>
+          <div class="tr"><span class="td"></span>IT 상식 — 남은 학습</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh fu d1"><span class="sh-t">오늘 남은 학습</span></div>
+    <div class="fu d1" style="margin:0 20px;background:linear-gradient(135deg,#0F1D32,#0B1020);border:1px solid #1E3A5F;border-radius:var(--r);padding:15px;cursor:pointer;position:relative;overflow:hidden;transition:transform .13s" onclick="startQuiz()" ontouchstart="">
+      <div style="position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blu);font-size:15px">▶</div>
+      <p style="font-size:10px;font-weight:700;color:var(--blu);letter-spacing:1px;margin-bottom:4px;text-transform:uppercase">📌 IT 상식</p>
+      <h3 style="font-family:'Gmarket Sans';font-size:15px;font-weight:700;margin-bottom:3px">AI·클라우드 기초 개념</h3>
+      <p style="font-size:11px;color:var(--tx2)">생성형 AI, SaaS·PaaS·IaaS 구분</p>
+      <div style="display:flex;gap:9px;margin-top:9px"><span style="font-size:11px;color:var(--tx3)">🕒 약 7분</span><span style="font-size:11px;color:var(--tx3)">📝 10문제</span><span style="font-size:11px;color:var(--tx3)">⚡ +40 XP</span></div>
+    </div>
+
+    <div class="sh fu d2"><span class="sh-t">무료 데일리 학습 3종</span><a class="sh-m">전체보기</a></div>
+    <div class="fsc fu d2">
+      <div class="fc" style="--cc:var(--grn)" onclick="startQuiz()">
+        <div class="f-ic">🧠</div><div class="f-nm">직무적성</div>
+        <div class="f-ds">언어 · 수리 · 추리<br>통합 3과목</div>
+        <div class="f-bw"><div class="f-bf" style="width:72%"></div></div><div class="f-pc">72% · Lv.4</div>
+      </div>
+      <div class="fc" style="--cc:var(--blu)" onclick="startEng()">
+        <div class="f-ic">📖</div><div class="f-nm">비즈니스 영어</div>
+        <div class="f-ds">스토리 5단계<br>읽기→쓰기</div>
+        <div class="f-bw"><div class="f-bf" style="width:60%"></div></div><div class="f-pc">60% · Lv.3</div>
+      </div>
+      <div class="fc" style="--cc:var(--pur)" onclick="startQuiz()">
+        <div class="f-ic">💻</div><div class="f-nm">IT 상식</div>
+        <div class="f-ds">AI·클라우드·<br>보안·데이터</div>
+        <div class="f-bw"><div class="f-bf" style="width:21%"></div></div><div class="f-pc">21% · Lv.1</div>
+      </div>
+    </div>
+
+    <div class="sh fu d3"><span class="sh-t">유료 심화 트랙</span><a class="sh-m" onclick="go('learn')">전체보기</a></div>
+    <div class="tb pub fu d3" onclick="alert('공기업 심화 트랙 → 구독 후 이용')"><div class="tb-i">🏛️</div><div class="tb-inf"><p class="tb-tag">공기업 트랙</p><p class="tb-t">NCS 집중 + 한국사 + 면접</p><p class="tb-s">코레일·한전·수공 기출 완전 분석</p></div><span class="tb-ar">›</span></div>
+    <div class="tb corp fu d4" style="margin-top:8px" onclick="alert('대기업 심화 트랙 → 구독 후 이용')"><div class="tb-i">🏢</div><div class="tb-inf"><p class="tb-tag">대기업 트랙</p><p class="tb-t">GSAT·LG·현대 인적성 풀패키지</p><p class="tb-s">기업별 유형 완전 분리</p></div><span class="tb-ar">›</span></div>
+    <div class="tb fin fu d5" style="margin-top:8px" onclick="alert('금융권 심화 트랙 → 구독 후 이용')"><div class="tb-i">💳</div><div class="tb-inf"><p class="tb-tag">금융권 트랙</p><p class="tb-t">IBK·신한·KB·농협 필기 + 자격</p><p class="tb-s">TESAT·은행 시사상식 포함</p></div><span class="tb-ar">›</span></div>
+
+    <div class="sh fu d4" style="margin-top:6px"><span class="sh-t">이번 주 리그</span><a class="sh-m">전체보기</a></div>
+    <div class="ls fu d4">
+      <div class="lr"><span class="rn2 g">1</span><div class="rav">🦁</div><div class="ri"><div class="rnam">이합격</div><div class="rsub">연속 21일 · 공기업</div></div><span class="rxp">3,420</span></div>
+      <div class="lr"><span class="rn2 s">2</span><div class="rav">🐯</div><div class="ri"><div class="rnam">박취업</div><div class="rsub">연속 14일 · 대기업</div></div><span class="rxp">2,890</span></div>
+      <div class="lr me"><span class="rn2 b">3</span><div class="rav">🐻</div><div class="ri"><div class="rnam">나 (김준비)</div><div class="rsub">연속 7일 · 금융권</div></div><span class="rxp">1,240</span></div>
+      <div class="lr"><span class="rn2">4</span><div class="rav">🦊</div><div class="ri"><div class="rnam">최도전</div><div class="rsub">연속 5일 · 대기업</div></div><span class="rxp">980</span></div>
+    </div>
+  </div>
+  <nav class="nav" id="hn">
+    <button class="ni on" onclick="nav(this);go('home')"><span class="nico">🏠</span>홈</button>
+    <button class="ni" onclick="nav(this);go('learn')"><span class="nico">📚</span>학습</button>
+    <button class="ni" onclick="nav(this);go('cert')"><span class="nico">🏅</span>자격증</button>
+    <button class="ni" onclick="nav(this)"><span class="nico">🏆</span>리그</button>
+    <button class="ni" onclick="nav(this);go('my')"><span class="nico">👤</span>MY</button>
+  </nav>
+</div>
+
+<!-- ═══ LEARN ═══ -->
+<div class="scr" id="learn">
+  <div class="top"><div class="logo">Job<b>Up</b></div><div class="top-r"><div class="badge f">🔥 7일</div><div class="badge x">⚡ 1,240</div></div></div>
+  <div class="body">
+    <div class="ltabs"><div class="lt on" onclick="ltab(this,'free')">무료 기본</div><div class="lt" onclick="ltab(this,'prem')">유료 심화</div></div>
+    <div id="freeTab">
+      <div class="sh"><span class="sh-t">직무적성 — 통합 3과목</span></div>
+      <div class="sg">
+        <div class="sb" style="--cc:var(--grn)" onclick="startQuiz('lan')"><div class="sb-i">🔤</div><div class="sb-n">언어 Language</div><div class="sb-d">어휘·독해·명제·언어추리</div><div class="sb-bw"><div class="sb-bf" style="width:72%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.4 · 72%</span></div></div>
+        <div class="sb" style="--cc:var(--blu)" onclick="startQuiz('num')"><div class="sb-i">🔢</div><div class="sb-n">수리 Numeracy</div><div class="sb-d">자료해석·수추리·응용계산</div><div class="sb-bw"><div class="sb-bf" style="width:55%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.3 · 55%</span></div></div>
+        <div class="sb" style="--cc:var(--pur)" onclick="startQuiz('rea')"><div class="sb-i">🔀</div><div class="sb-n">추리 Reasoning</div><div class="sb-d">도형추리·공간지각·패턴</div><div class="sb-bw"><div class="sb-bf" style="width:38%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.2 · 38%</span></div></div>
+        <div class="sb" style="--cc:var(--blu)" onclick="startEng()"><div class="sb-i">📖</div><div class="sb-n">비즈니스 영어</div><div class="sb-d">스토리 5단계 세션</div><div class="sb-bw"><div class="sb-bf" style="width:60%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.3 · 60%</span></div></div>
+        <div class="sb" style="--cc:var(--pur)" onclick="startQuiz('rea')"><div class="sb-i">💻</div><div class="sb-n">IT 상식</div><div class="sb-d">AI·클라우드·보안</div><div class="sb-bw"><div class="sb-bf" style="width:21%"></div></div><div class="sb-ft"><span class="sb-pc">Lv.1 · 21%</span><span class="sb-nw">NEW</span></div></div>
+      </div>
+    </div>
+    <div id="premTab" style="display:none">
+      <div class="ph" style="margin-top:13px" onclick="alert('구독 후 이용 가능')"><div class="ph-ic">👑</div><div class="ph-inf"><p class="ph-tag">Premium 구독</p><p class="ph-t">전체 심화 + 자격증 무제한</p><p class="ph-s">월 13,900원 · 7일 무료 체험</p></div><span class="ph-ar">›</span></div>
+      <div class="sh" style="margin-top:4px"><span class="sh-t">🏛️ 공기업 심화</span></div>
+      <div class="sg">
+        <div class="sb" style="--cc:var(--grn);opacity:.5"><div class="sb-i">📋</div><div class="sb-n">NCS 유형별 집중</div><div class="sb-d">PSAT형·모듈형</div><div class="sb-bw"><div class="sb-bf" style="width:0%"></div></div><div class="sb-ft"><span class="sb-pc">0%</span><span class="sb-lk">🔒</span></div></div>
+        <div class="sb" style="--cc:var(--grn);opacity:.5"><div class="sb-i">📜</div><div class="sb-n">한국사능력검정</div><div class="sb-d">1·2급 기출 집중</div><div class="sb-bw"><div class="sb-bf" style="width:0%"></div></div><div class="sb-ft"><span class="sb-pc">0%</span><span class="sb-lk">🔒</span></div></div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav"><button class="ni" onclick="nav(this);go('home')"><span class="nico">🏠</span>홈</button><button class="ni on" onclick="nav(this)"><span class="nico">📚</span>학습</button><button class="ni" onclick="nav(this);go('cert')"><span class="nico">🏅</span>자격증</button><button class="ni" onclick="nav(this)"><span class="nico">🏆</span>리그</button><button class="ni" onclick="nav(this);go('my')"><span class="nico">👤</span>MY</button></nav>
+</div>
+
+<!-- ═══ ENGLISH STORY ═══ -->
+<div class="scr" id="eng">
+  <div class="eng-top">
+    <button class="eng-x" onclick="go('home')">✕</button>
+    <div class="eng-pb-w"><div class="eng-pb" id="engPb" style="width:0%"></div></div>
+    <span class="eng-sl" id="engSl">STEP 1 / 5</span>
+  </div>
+  <div class="step-bar" id="stepBar">
+    <div class="step-dot on"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+  </div>
+  <div class="body" id="engBody" style="padding-bottom:82px"></div>
+  <div class="sfoot"><button class="scta" id="engCta" onclick="engNext()">다음</button></div>
+</div>
+
+<!-- ═══ CERT ═══ -->
+<div class="scr" id="cert">
+  <div class="top"><div class="logo">Job<b>Up</b></div><div class="top-r"><div class="badge f">🔥 7일</div><div class="badge x">⚡ 1,240</div></div></div>
+  <div class="body">
+    <div class="ph fu" style="margin-top:14px" onclick="alert('구독하면 전체 자격증 무제한')"><div class="ph-ic">👑</div><div class="ph-inf"><p class="ph-tag">WAFULL — 와우패스 연계</p><p class="ph-t">전체 자격증 무제한 수강</p><p class="ph-s">월 13,900원 · 7일 무료 체험</p></div><span class="ph-ar">›</span></div>
+    <div class="ctabs fu d1"><div class="ctab on" onclick="cFilter(this)">전체</div><div class="ctab" onclick="cFilter(this)">금융</div><div class="ctab" onclick="cFilter(this)">회계·세무</div><div class="ctab" onclick="cFilter(this)">경영·경제</div><div class="ctab" onclick="cFilter(this)">무역</div></div>
+    <div class="clist fu d2">
+      <div class="cc"><div class="cc-top"><div class="cc-thumb" style="background:rgba(244,196,48,.1)">📊</div><div class="cc-info"><div class="cc-nm">재경관리사</div><div class="cc-org">삼일회계법인 · 국가공인</div><div class="cc-tags"><span class="ct mid">중급</span><span class="ct cat">회계·세무</span></div></div><div class="cc-dd">D-18</div></div><div class="cprog-w"><div class="cpb"><div class="cpbf" style="width:41%"></div></div><div class="cpl"><span>41% · 45일 완성 프로젝트</span><span>D-18</span></div></div><div class="cc-bot"><div class="cc-stats"><span class="cst">⭐ <strong>4.8</strong></span><span class="cst">👥 <strong>4,201</strong></span></div><div class="cc-pr"><span class="cpn owned">✓ 수강중</span><button class="cbtn owned" onclick="startQuiz()">이어하기</button></div></div></div>
+      <div class="cc"><div class="cc-top"><div class="cc-thumb" style="background:rgba(39,217,138,.08)">📰</div><div class="cc-info"><div class="cc-nm">TESAT (S·A등급)</div><div class="cc-org">한국경제신문 · 경제이해력</div><div class="cc-tags"><span class="ct mid">중급</span><span class="ct cat">경영·경제</span></div></div></div><div class="cc-bot"><div class="cc-stats"><span class="cst">⭐ <strong>4.7</strong></span><span class="cst">👥 <strong>3,120</strong></span></div><div class="cc-pr"><span class="cpn">₩19,900</span><button class="cbtn buy" onclick="alert('결제 모달')">구매</button></div></div></div>
+      <div class="cc"><span class="sbadge2">👑 구독 포함</span><div class="cc-top"><div class="cc-thumb" style="background:rgba(157,127,255,.1)">📈</div><div class="cc-info"><div class="cc-nm">투자자산운용사</div><div class="cc-org">금융투자협회 · 국가공인</div><div class="cc-tags"><span class="ct hard">고난이도</span><span class="ct cat">금융</span></div></div></div><div class="cc-bot"><div class="cc-stats"><span class="cst">⭐ <strong>4.9</strong></span><span class="cst">👥 <strong>2,840</strong></span></div><div class="cc-pr"><span class="cpn">₩49,900</span><button class="cbtn sub" onclick="alert('구독하면 무제한')">구독으로</button></div></div></div>
+      <div class="cc"><div class="cc-top"><div class="cc-thumb" style="background:rgba(75,150,255,.08)">🏦</div><div class="cc-info"><div class="cc-nm">은행FP</div><div class="cc-org">은행연합회 · 국가공인</div><div class="cc-tags"><span class="ct easy">입문</span><span class="ct cat">금융</span></div></div></div><div class="cc-bot"><div class="cc-stats"><span class="cst">⭐ <strong>4.6</strong></span><span class="cst">👥 <strong>5,903</strong></span></div><div class="cc-pr"><span class="cpn">₩14,900</span><button class="cbtn buy" onclick="alert('결제 모달')">구매</button></div></div></div>
+    </div>
+  </div>
+  <nav class="nav"><button class="ni" onclick="nav(this);go('home')"><span class="nico">🏠</span>홈</button><button class="ni" onclick="nav(this);go('learn')"><span class="nico">📚</span>학습</button><button class="ni on" onclick="nav(this)"><span class="nico">🏅</span>자격증</button><button class="ni" onclick="nav(this)"><span class="nico">🏆</span>리그</button><button class="ni" onclick="nav(this);go('my')"><span class="nico">👤</span>MY</button></nav>
+</div>
+
+<!-- ═══ MY ═══ -->
+<div class="scr" id="my">
+  <div class="top"><div class="logo">Job<b>Up</b></div><div class="top-r"><div class="badge f">🔥 7일</div><div class="badge x">⚡ 1,240</div></div></div>
+  <div class="body">
+    <div class="my-prof fu">
+      <div class="my-av">🐻</div>
+      <div>
+        <div class="my-nm">김준비</div>
+        <div class="my-bs"><span class="my-b t">금융권 트랙</span><span class="my-b l">🏆 브론즈 리그</span></div>
+        <div class="my-row" style="margin-top:8px">
+          <div class="my-s"><div class="my-sv">7</div><div class="my-sl">연속일</div></div>
+          <div class="my-s"><div class="my-sv">43</div><div class="my-sl">활동일</div></div>
+          <div class="my-s"><div class="my-sv">1,240</div><div class="my-sl">XP</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Garden -->
+    <div class="sh fu d1" style="margin-top:14px"><span class="sh-t">🌿 Activity Garden</span><a class="sh-m" id="shareBtn" onclick="shareGarden()">공유하기</a></div>
+    <div class="garden fu d1">
+      <div class="g-head"><span class="g-title">최근 52주 학습 기록</span><span class="g-share" onclick="shareGarden()">📤 SNS 공유</span></div>
+      <div class="g-grid" id="gardenGrid"></div>
+      <div class="g-legend"><span class="g-ll">적음</span><div class="gc-sm gc l0"></div><div class="gc-sm gc l1"></div><div class="gc-sm gc l2"></div><div class="gc-sm gc l3"></div><div class="gc-sm gc l4"></div><span class="g-ll">많음</span></div>
+      <div class="g-stats">
+        <div class="gst"><div class="gst-v">43</div><div class="gst-l">총 활동일</div></div>
+        <div class="gst"><div class="gst-v">7일</div><div class="gst-l">최장 연속</div></div>
+        <div class="gst"><div class="gst-v">1,240</div><div class="gst-l">올해 XP</div></div>
+      </div>
+    </div>
+
+    <!-- 레벨 -->
+    <div class="sh fu d2"><span class="sh-t">과목별 레벨</span></div>
+    <div class="lv-grid fu d2">
+      <div class="lv"><div class="lv-em">🔤</div><div class="lv-nm">언어</div><div class="lv-num">Lv.4</div><div class="lv-bw"><div class="lv-bf" style="width:72%"></div></div></div>
+      <div class="lv"><div class="lv-em">🔢</div><div class="lv-nm">수리</div><div class="lv-num">Lv.3</div><div class="lv-bw"><div class="lv-bf" style="width:55%"></div></div></div>
+      <div class="lv"><div class="lv-em">🔀</div><div class="lv-nm">추리</div><div class="lv-num">Lv.2</div><div class="lv-bw"><div class="lv-bf" style="width:38%"></div></div></div>
+      <div class="lv"><div class="lv-em">📖</div><div class="lv-nm">영어</div><div class="lv-num">Lv.3</div><div class="lv-bw"><div class="lv-bf" style="width:60%"></div></div></div>
+      <div class="lv"><div class="lv-em">💻</div><div class="lv-nm">IT 상식</div><div class="lv-num">Lv.1</div><div class="lv-bw"><div class="lv-bf" style="width:21%"></div></div></div>
+    </div>
+
+    <!-- MyRoom 진입 -->
+    <div class="sh fu d3"><span class="sh-t">나만의 공부방</span></div>
+    <div class="mr-btn fu d3" onclick="go('room')">
+      <div class="mr-em">🏡</div>
+      <div class="mr-inf"><div class="mr-t">MyRoom 꾸미기</div><div class="mr-s">보유 아이템 11개 · 새 아이템 3개 해제 가능!</div></div>
+      <span class="mr-ar">›</span>
+    </div>
+  </div>
+  <nav class="nav"><button class="ni" onclick="nav(this);go('home')"><span class="nico">🏠</span>홈</button><button class="ni" onclick="nav(this);go('learn')"><span class="nico">📚</span>학습</button><button class="ni" onclick="nav(this);go('cert')"><span class="nico">🏅</span>자격증</button><button class="ni" onclick="nav(this)"><span class="nico">🏆</span>리그</button><button class="ni on" onclick="nav(this)"><span class="nico">👤</span>MY</button></nav>
+</div>
+
+<!-- ═══ MY ROOM (Isometric) ═══ -->
+<div class="scr" id="room">
+  <div class="room-top">
+    <button class="room-bk" onclick="go('my')">‹</button>
+    <span class="room-t">🏡 MyRoom — 나의 공부방</span>
+    <span class="room-eb" onclick="toast('아이템 서랍에서 원하는 아이템을 탭해 배치하세요!')">편집</span>
+  </div>
+  <div class="body" style="padding-bottom:20px">
+
+    <!-- 아이소메트릭 공부방 -->
+    <div class="iso-wrap">
+      <!-- tooltip -->
+      <div class="iso-tip" id="isoTip"></div>
+
+      <svg id="isoSvg" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <!-- 앰비언트 그라디언트 -->
+          <radialGradient id="ambience" cx="50%" cy="30%" r="60%">
+            <stop offset="0%" stop-color="#1a2050" stop-opacity=".8"/>
+            <stop offset="100%" stop-color="#060810" stop-opacity="1"/>
+          </radialGradient>
+          <!-- 그림자 필터 -->
+          <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity=".5"/>
+          </filter>
+          <filter id="glowG">
+            <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#27D98A" flood-opacity=".7"/>
+          </filter>
+          <filter id="glowP">
+            <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#9D7FFF" flood-opacity=".7"/>
+          </filter>
+          <filter id="glowY">
+            <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#F4C430" flood-opacity=".7"/>
+          </filter>
+        </defs>
+
+        <!-- ── 배경 ── -->
+        <rect width="400" height="340" fill="url(#ambience)"/>
+
+        <!-- ══ 방 구조 (아이소메트릭) ══
+             좌표계: 아이소메트릭 변환
+             isoX(x,y) = cx + (x-y)*tw/2
+             isoY(x,y) = cy + (x+y)*th/2 - z*hz
+             tw=56, th=28, hz=24, cx=200, cy=220
+        -->
+
+        <!-- ── 바닥 타일 (6×6 그리드) ── -->
+        <!-- 메인 바닥 - 체크무늬 스타일 -->
+        <g opacity=".95">
+          <!-- row y=0 -->
+          <polygon points="200,192 228,206 200,220 172,206" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="228,206 256,220 228,234 200,220" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="256,220 284,234 256,248 228,234" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="144,206 172,220 144,234 116,220" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="172,220 200,234 172,248 144,234" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <!-- row y=1 -->
+          <polygon points="200,220 228,234 200,248 172,234" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="228,234 256,248 228,262 200,248" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="256,248 284,262 256,276 228,262" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="144,234 172,248 144,262 116,248" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="172,248 200,262 172,276 144,262" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <!-- row y=2 -->
+          <polygon points="200,248 228,262 200,276 172,262" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="228,262 256,276 228,290 200,276" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="144,262 172,276 144,290 116,276" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="172,276 200,290 172,304 144,290" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <!-- 연장 타일 -->
+          <polygon points="284,234 312,248 284,262 256,248" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="116,220 144,234 116,248 88,234" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="88,234 116,248 88,262 60,248" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="116,248 144,262 116,276 88,262" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="88,262 116,276 88,290 60,276" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="284,262 312,276 284,290 256,276" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="312,248 340,262 312,276 284,262" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <!-- 바닥 베이스 확장 -->
+          <polygon points="200,276 228,290 200,304 172,290" fill="#1e2238" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="228,290 256,304 228,318 200,304" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+          <polygon points="144,290 172,304 144,318 116,304" fill="#1a1e32" stroke="#252a45" stroke-width=".5"/>
+        </g>
+
+        <!-- ── 왼쪽 벽 (x=0 평면) ── -->
+        <polygon points="88,120 116,106 116,248 88,262" fill="#16192c" stroke="#232740" stroke-width="1"/>
+        <polygon points="116,106 144,92 144,234 116,248" fill="#16192c" stroke="#232740" stroke-width="1"/>
+        <polygon points="144,92 172,78 172,220 144,234" fill="#16192c" stroke="#232740" stroke-width="1"/>
+        <polygon points="172,78 200,64 200,206 172,220" fill="#16192c" stroke="#232740" stroke-width="1"/>
+        <polygon points="200,64 228,78 228,220 200,206" fill="#14172a" stroke="#232740" stroke-width="1"/>
+        <polygon points="228,78 256,92 256,234 228,220" fill="#14172a" stroke="#232740" stroke-width="1"/>
+        <polygon points="256,92 284,106 284,248 256,234" fill="#14172a" stroke="#232740" stroke-width="1"/>
+        <polygon points="284,106 312,120 312,262 284,248" fill="#14172a" stroke="#232740" stroke-width="1"/>
+        <!-- 왼쪽 벽 상단 테두리 (밝은 선) -->
+        <polyline points="88,120 116,106 144,92 172,78 200,64 228,78 256,92 284,106 312,120" fill="none" stroke="#2e3460" stroke-width="1.2"/>
+
+        <!-- ── 오른쪽 벽 (y=0 평면) ── -->
+        <polygon points="312,120 340,134 340,276 312,262" fill="#12152a" stroke="#1e2240" stroke-width="1"/>
+        <polygon points="340,134 368,148 368,290 340,276" fill="#12152a" stroke="#1e2240" stroke-width="1"/>
+        <!-- 오른쪽 벽 상단 테두리 -->
+        <polyline points="312,120 340,134 368,148" fill="none" stroke="#2e3460" stroke-width="1.2"/>
+
+        <!-- ── 벽 몰딩 (장식 줄) ── -->
+        <polyline points="88,160 116,146 144,132 172,118 200,104 228,118 256,132 284,146 312,160" fill="none" stroke="#252a45" stroke-width="1" stroke-dasharray="3,4" opacity=".6"/>
+        <polyline points="312,160 340,174 368,188" fill="none" stroke="#252a45" stroke-width="1" stroke-dasharray="3,4" opacity=".6"/>
+
+        <!-- ══ 아이템들 (앞에서 뒤 순서로 z-order) ══ -->
+
+        <!-- ── 책상 + 의자 (앞쪽 중앙) ── -->
+        <!-- 의자 다리 -->
+        <g id="chair" class="iso-item" onclick="isoTip(event,'기본 의자 🪑','신규 가입 기본 아이템')" filter="url(#shadow)">
+          <!-- 의자 좌석 면 -->
+          <polygon points="185,250 205,240 215,246 195,256" fill="#4a3820" stroke="#6b5230" stroke-width=".8"/>
+          <polygon points="185,250 185,258 195,264 195,256" fill="#3a2c18" stroke="#4a3820" stroke-width=".8"/>
+          <polygon points="195,256 215,246 215,254 195,264" fill="#2e2213" stroke="#3a2c18" stroke-width=".8"/>
+          <!-- 등받이 -->
+          <polygon points="183,238 193,233 193,250 183,255" fill="#4a3820" stroke="#6b5230" stroke-width=".8"/>
+          <polygon points="183,238 193,233 195,234 185,239" fill="#5c4828" stroke="#6b5230" stroke-width=".8"/>
+          <!-- 다리 -->
+          <line x1="185" y1="255" x2="183" y2="265" stroke="#3a2c18" stroke-width="1.5"/>
+          <line x1="195" y1="262" x2="193" y2="272" stroke="#3a2c18" stroke-width="1.5"/>
+          <line x1="215" y1="252" x2="213" y2="262" stroke="#3a2c18" stroke-width="1.5"/>
+          <line x1="205" y1="246" x2="203" y2="256" stroke="#3a2c18" stroke-width="1.5"/>
+        </g>
+
+        <!-- 책상 본체 -->
+        <g id="desk" class="iso-item" onclick="isoTip(event,'책상 🖥️','신규 가입 기본 아이템 — 모니터·노트북 위에 놓여 있어요')" filter="url(#shadow)">
+          <!-- 상판 top -->
+          <polygon points="165,218 220,190 248,205 193,233" fill="#5c4020" stroke="#7a5528" stroke-width="1"/>
+          <!-- 상판 left side -->
+          <polygon points="165,218 193,233 193,241 165,226" fill="#3d2a12" stroke="#4a3318" stroke-width="1"/>
+          <!-- 상판 right side -->
+          <polygon points="193,233 248,205 248,213 193,241" fill="#4a3318" stroke="#4a3318" stroke-width="1"/>
+          <!-- 왼쪽 다리 -->
+          <polygon points="165,226 172,222 172,248 165,252" fill="#3d2a12" stroke="#2e2010" stroke-width=".8"/>
+          <polygon points="165,252 172,248 172,256 165,260" fill="#2e1f0e" stroke="#2e2010" stroke-width=".8"/>
+          <!-- 오른쪽 다리 -->
+          <polygon points="241,210 248,206 248,232 241,236" fill="#3d2a12" stroke="#2e2010" stroke-width=".8"/>
+          <polygon points="241,236 248,232 248,240 241,244" fill="#2e1f0e" stroke="#2e2010" stroke-width=".8"/>
+          <!-- 서랍 (왼쪽) -->
+          <polygon points="165,226 185,216 185,232 165,242" fill="#4a3215" stroke="#3d2a12" stroke-width=".5"/>
+          <circle cx="177" cy="234" r="2" fill="#c9a030" opacity=".7"/>
+          <!-- 모니터 -->
+          <polygon points="196,200 218,189 228,194 206,205" fill="#1a1e2e" stroke="#2e3650" stroke-width=".8"/>
+          <polygon points="196,200 206,205 206,215 196,210" fill="#141828" stroke="#1e2240" stroke-width=".8"/>
+          <polygon points="206,205 228,194 228,204 206,215" fill="#0d1020" stroke="#1e2240" stroke-width=".8"/>
+          <!-- 모니터 화면 -->
+          <polygon points="198,202 216,193 224,197 206,206" fill="#0a3a6a"/>
+          <!-- 화면 안 초록 텍스트 줄 (JobUp) -->
+          <line x1="200" y1="200" x2="212" y2="194" stroke="#27D98A" stroke-width="1" opacity=".8"/>
+          <line x1="201" y1="203" x2="210" y2="198" stroke="#27D98A" stroke-width=".7" opacity=".5"/>
+          <line x1="201" y1="205" x2="207" y2="202" stroke="#4B96FF" stroke-width=".7" opacity=".5"/>
+          <!-- 모니터 받침 -->
+          <polygon points="208,213 216,209 218,210 210,214" fill="#252a3e" stroke="#2e3450" stroke-width=".5"/>
+          <polygon points="208,213 210,214 210,216 208,215" fill="#1e2238" stroke="#2e3450" stroke-width=".5"/>
+          <!-- 키보드 -->
+          <polygon points="196,214 218,203 222,205 200,216" fill="#252a3e" stroke="#2e3450" stroke-width=".6"/>
+          <polygon points="196,214 200,216 200,218 196,216" fill="#1a1e32" stroke="#2e3450" stroke-width=".5"/>
+          <!-- 머그컵 -->
+          <polygon points="188,210 193,207 195,208 190,211" fill="#9D7FFF" stroke="#7a5fcc" stroke-width=".5"/>
+          <polygon points="188,210 190,211 190,215 188,214" fill="#7a5fcc" stroke="#5a40aa" stroke-width=".5"/>
+          <polygon points="190,211 195,208 195,212 190,215" fill="#6a50b8" stroke="#5a40aa" stroke-width=".5"/>
+          <!-- 노트 -->
+          <polygon points="181,222 190,217 193,219 184,224" fill="#f4e8c0" stroke="#d4c890" stroke-width=".5" opacity=".9"/>
+          <line x1="183" y1="222" x2="189" y2="219" stroke="#aaa080" stroke-width=".5" opacity=".6"/>
+          <line x1="183" y1="223" x2="188" y2="220" stroke="#aaa080" stroke-width=".5" opacity=".4"/>
+        </g>
+
+        <!-- ── 바닥 매트 ── -->
+        <polygon points="140,258 185,235 215,250 170,273" fill="#1e2848" stroke="#252d52" stroke-width=".8" opacity=".7"/>
+
+        <!-- ── 책꽂이 (왼쪽 벽면 붙음) ── -->
+        <g id="bookshelf" class="iso-item" onclick="isoTip(event,'영어 원서 책꽂이 📚','영어 세션 30회 완주 보상')" filter="url(#shadow)">
+          <!-- 본체 케이스 top -->
+          <polygon points="112,158 136,145 148,152 124,165" fill="#3d2a12" stroke="#4a3318" stroke-width=".8"/>
+          <!-- left -->
+          <polygon points="112,158 124,165 124,228 112,221" fill="#2e1f0e" stroke="#3d2a12" stroke-width=".8"/>
+          <!-- right -->
+          <polygon points="124,165 148,152 148,215 124,228" fill="#3a2610" stroke="#3d2a12" stroke-width=".8"/>
+          <!-- 선반 구분선들 -->
+          <line x1="112" y1="180" x2="148" y2="161" stroke="#4a3318" stroke-width=".8"/>
+          <line x1="124" y1="186" x2="124" y2="228" stroke="#4a3318" stroke-width=".5" opacity=".4"/>
+          <line x1="112" y1="199" x2="148" y2="180" stroke="#4a3318" stroke-width=".8"/>
+          <!-- 1단 책들 -->
+          <polygon points="114,163 118,161 118,179 114,181" fill="#F4C430" stroke="#c8a020" stroke-width=".4"/>
+          <polygon points="118,161 122,159 122,177 118,179" fill="#4B96FF" stroke="#3070cc" stroke-width=".4"/>
+          <polygon points="122,159 126,157 126,175 122,177" fill="#27D98A" stroke="#1a9a60" stroke-width=".4"/>
+          <polygon points="126,157 130,155 130,173 126,175" fill="#FF5C5C" stroke="#cc3838" stroke-width=".4"/>
+          <polygon points="130,155 135,153 135,171 130,173" fill="#9D7FFF" stroke="#7a5fcc" stroke-width=".4"/>
+          <polygon points="135,153 140,151 140,169 135,171" fill="#F4C430" stroke="#c8a020" stroke-width=".4"/>
+          <polygon points="140,151 145,149 145,167 140,169" fill="#4B96FF" stroke="#3070cc" stroke-width=".4"/>
+          <!-- 2단 책들 -->
+          <polygon points="113,182 117,180 117,198 113,200" fill="#9D7FFF" stroke="#7a5fcc" stroke-width=".4"/>
+          <polygon points="117,180 121,178 121,196 117,198" fill="#27D98A" stroke="#1a9a60" stroke-width=".4"/>
+          <polygon points="121,178 125,176 125,194 121,196" fill="#F4C430" stroke="#c8a020" stroke-width=".4"/>
+          <polygon points="125,176 131,173 131,191 125,194" fill="#FF5C5C" stroke="#cc3838" stroke-width=".4"/>
+          <polygon points="131,173 137,170 137,188 131,191" fill="#4B96FF" stroke="#3070cc" stroke-width=".4"/>
+          <polygon points="137,170 144,167 144,185 137,188" fill="#27D98A" stroke="#1a9a60" stroke-width=".4"/>
+          <!-- 3단: 트로피 놓인 선반 -->
+          <polygon points="113,200 117,198 117,213 113,215" fill="#3d2a12" stroke="#4a3318" stroke-width=".4" opacity=".5"/>
+        </g>
+
+        <!-- ── 합격 증서 액자 (왼쪽 벽에 걸림) ── -->
+        <g id="cert" class="iso-item" onclick="isoTip(event,'합격 증서 액자 📜','재경관리사 완성 보상 — 자격증명이 새겨집니다')" filter="url(#glowG)">
+          <!-- 액자 테두리 -->
+          <polygon points="155,118 175,108 183,112 163,122" fill="#c9a030" stroke="#a07820" stroke-width=".8"/>
+          <polygon points="155,118 163,122 163,140 155,136" fill="#8c6818" stroke="#7a5810" stroke-width=".8"/>
+          <polygon points="163,122 183,112 183,130 163,140" fill="#a07820" stroke="#8c6818" stroke-width=".8"/>
+          <!-- 증서 내용 (종이색) -->
+          <polygon points="157,120 173,112 180,116 164,124" fill="#f5f0e0" stroke="#e0d8c0" stroke-width=".4"/>
+          <polygon points="157,120 164,124 164,138 157,134" fill="#e8e0c8" stroke="#d8d0b8" stroke-width=".4"/>
+          <polygon points="164,124 180,116 180,130 164,138" fill="#ece4cc" stroke="#d8d0b8" stroke-width=".4"/>
+          <!-- 증서 텍스트 라인들 -->
+          <line x1="160" y1="122" x2="174" y2="115" stroke="#8c7840" stroke-width=".8" opacity=".7"/>
+          <line x1="160" y1="125" x2="170" y2="120" stroke="#8c7840" stroke-width=".5" opacity=".5"/>
+          <line x1="160" y1="128" x2="173" y2="122" stroke="#8c7840" stroke-width=".5" opacity=".5"/>
+          <line x1="160" y1="131" x2="169" y2="126" stroke="#8c7840" stroke-width=".5" opacity=".4"/>
+          <!-- 도장 (초록 원) -->
+          <ellipse cx="175" cy="127" rx="3" ry="2" fill="#27D98A" opacity=".8" transform="rotate(-25,175,127)"/>
+          <text x="175" y="129" font-size="3" fill="#fff" text-anchor="middle" opacity=".9" transform="rotate(-25,175,127)">합격</text>
+          <!-- 걸이 끈 -->
+          <line x1="165" y1="108" x2="165" y2="118" stroke="#8c6818" stroke-width=".8"/>
+        </g>
+
+        <!-- ── 창문 (오른쪽 벽) ── -->
+        <g id="window" class="iso-item" onclick="isoTip(event,'창문 🪟','신규 가입 기본 아이템')">
+          <!-- 창틀 -->
+          <polygon points="316,148 340,135 350,141 326,154" fill="#2e3860" stroke="#3a4878" stroke-width=".8"/>
+          <polygon points="316,148 326,154 326,195 316,189" fill="#222a50" stroke="#2e3860" stroke-width=".8"/>
+          <polygon points="326,154 350,141 350,182 326,195" fill="#28305a" stroke="#2e3860" stroke-width=".8"/>
+          <!-- 창 유리 (4분할) -->
+          <polygon points="318,151 329,145 333,147 322,153" fill="#4B96FF" opacity=".18"/>
+          <polygon points="333,147 343,142 347,144 337,149" fill="#4B96FF" opacity=".18"/>
+          <polygon points="318,160 329,154 333,156 322,162" fill="#4B96FF" opacity=".18"/>
+          <polygon points="333,156 343,151 347,153 337,158" fill="#4B96FF" opacity=".18"/>
+          <!-- 창 가로 세로 프레임 -->
+          <line x1="318" y1="152" x2="347" y2="138" stroke="#3a4878" stroke-width=".7"/>
+          <line x1="332" y1="145" x2="332" y2="188" stroke="#3a4878" stroke-width=".7"/>
+          <!-- 창밖 빛 효과 -->
+          <polygon points="318,151 329,145 333,147 322,153" fill="#fff" opacity=".04"/>
+          <!-- 빛 반사 -->
+          <line x1="319" y1="151" x2="328" y2="146" stroke="#fff" stroke-width=".5" opacity=".15"/>
+        </g>
+
+        <!-- ── 달력 (오른쪽 벽) ── -->
+        <g id="calendar" class="iso-item" onclick="isoTip(event,'큰 달력 🗓️','30일 스트릭 달성 보상')">
+          <!-- 달력 프레임 -->
+          <polygon points="344,155 360,147 366,150 350,158" fill="#1a2a3e" stroke="#2e3d55" stroke-width=".8"/>
+          <polygon points="344,155 350,158 350,185 344,182" fill="#131e2e" stroke="#1e2d42" stroke-width=".8"/>
+          <polygon points="350,158 366,150 366,177 350,185" fill="#162236" stroke="#1e2d42" stroke-width=".8"/>
+          <!-- 달력 헤더 (빨간) -->
+          <polygon points="345,157 349,155 365,148 361,150" fill="#cc3838" opacity=".8"/>
+          <!-- 달력 날짜 그리드 -->
+          <line x1="345" y1="163" x2="365" y2="153" stroke="#2e3d55" stroke-width=".5"/>
+          <line x1="345" y1="169" x2="365" y2="159" stroke="#2e3d55" stroke-width=".5"/>
+          <line x1="345" y1="175" x2="365" y2="165" stroke="#2e3d55" stroke-width=".5"/>
+          <line x1="348" y1="157" x2="348" y2="185" stroke="#2e3d55" stroke-width=".5" opacity=".5"/>
+          <line x1="352" y1="155" x2="352" y2="183" stroke="#2e3d55" stroke-width=".5" opacity=".5"/>
+          <line x1="356" y1="153" x2="356" y2="181" stroke="#2e3d55" stroke-width=".5" opacity=".5"/>
+          <line x1="360" y1="151" x2="360" y2="179" stroke="#2e3d55" stroke-width=".5" opacity=".5"/>
+          <!-- 오늘 날짜 표시 (초록 동그라미) -->
+          <circle cx="353" cy="168" r="2.5" fill="#27D98A" opacity=".9"/>
+          <!-- 달력 핀 -->
+          <circle cx="348" cy="157" r="1.2" fill="#9D7FFF" opacity=".9"/>
+          <circle cx="362" cy="151" r="1.2" fill="#9D7FFF" opacity=".9"/>
+        </g>
+
+        <!-- ── 화분 (오른쪽 앞) ── -->
+        <g id="plant" class="iso-item" onclick="isoTip(event,'화분 🪴','기본 아이템')">
+          <!-- 화분 -->
+          <polygon points="292,242 300,238 304,240 296,244" fill="#4a3010" stroke="#3a2408" stroke-width=".6"/>
+          <polygon points="292,242 296,244 296,254 292,252" fill="#3a2408" stroke="#2e1c06" stroke-width=".6"/>
+          <polygon points="296,244 304,240 304,250 296,254" fill="#3e2a0a" stroke="#2e1c06" stroke-width=".6"/>
+          <!-- 흙 -->
+          <polygon points="293,243 299,240 303,242 297,245" fill="#2a1a06" stroke="#1e1204" stroke-width=".4"/>
+          <!-- 줄기 -->
+          <line x1="298" y1="243" x2="296" y2="234" stroke="#2a5a18" stroke-width="1.2"/>
+          <line x1="298" y1="243" x2="302" y2="233" stroke="#2a5a18" stroke-width="1.2"/>
+          <!-- 잎들 -->
+          <ellipse cx="294" cy="231" rx="5" ry="3" fill="#27a848" opacity=".9" transform="rotate(-30,294,231)"/>
+          <ellipse cx="303" cy="229" rx="5" ry="3" fill="#1e8838" opacity=".9" transform="rotate(20,303,229)"/>
+          <ellipse cx="297" cy="227" rx="4" ry="3" fill="#27D98A" opacity=".8" transform="rotate(-10,297,227)"/>
+          <ellipse cx="300" cy="225" rx="4" ry="2.5" fill="#1e8838" opacity=".7" transform="rotate(15,300,225)"/>
+        </g>
+
+        <!-- ── 스탠드 조명 (책상 왼쪽) ── -->
+        <g id="lamp" class="iso-item" onclick="isoTip(event,'스탠드 조명 💡','Premium 구독자 전용 아이템')" filter="url(#glowY)">
+          <!-- 받침 -->
+          <polygon points="170,246 175,243 177,244 172,247" fill="#3a3010" stroke="#4a4018" stroke-width=".5"/>
+          <polygon points="170,246 172,247 172,250 170,249" fill="#2e2408" stroke="#3a3010" stroke-width=".5"/>
+          <!-- 기둥 -->
+          <line x1="173" y1="247" x2="171" y2="228" stroke="#6a6020" stroke-width="1.5"/>
+          <!-- 팔 -->
+          <line x1="171" y1="228" x2="181" y2="222" stroke="#6a6020" stroke-width="1.2"/>
+          <!-- 갓 -->
+          <polygon points="177,218 187,213 189,214 179,219" fill="#c8a020" stroke="#a07818" stroke-width=".6"/>
+          <polygon points="177,218 179,219 179,224 177,223" fill="#a07818" stroke="#8c6810" stroke-width=".6"/>
+          <polygon points="179,219 189,214 189,219 179,224" fill="#b08820" stroke="#8c6810" stroke-width=".6"/>
+          <!-- 빛 반사 (노란 원형) -->
+          <ellipse cx="183" cy="224" rx="10" ry="5" fill="#F4C430" opacity=".07" transform="rotate(-25,183,224)"/>
+        </g>
+
+        <!-- ── 트로피 (책꽂이 위) ── -->
+        <g id="trophy" class="iso-item" onclick="isoTip(event,'금빛 트로피 🏆','리그 1위 달성 보상')" filter="url(#glowY)">
+          <!-- 받침 -->
+          <polygon points="119,211 124,208 126,209 121,212" fill="#8c6818" stroke="#7a5810" stroke-width=".5"/>
+          <polygon points="119,211 121,212 121,216 119,215" fill="#6a5010" stroke="#5a4008" stroke-width=".5"/>
+          <!-- 기둥 -->
+          <polygon points="120,209 123,207 123,211 120,213" fill="#a07820" stroke="#8c6818" stroke-width=".4"/>
+          <!-- 컵 바디 -->
+          <polygon points="118,201 127,196 130,198 121,203" fill="#F4C430" stroke="#c8a020" stroke-width=".5"/>
+          <polygon points="118,201 121,203 121,210 118,208" fill="#c8a020" stroke="#a07818" stroke-width=".5"/>
+          <polygon points="121,203 130,198 130,205 121,210" fill="#d4ac28" stroke="#a07818" stroke-width=".5"/>
+          <!-- 핸들 -->
+          <path d="M118,203 Q114,205 115,208 Q116,211 118,209" fill="none" stroke="#c8a020" stroke-width=".8"/>
+          <path d="M130,198 Q134,200 133,203 Q132,206 130,205" fill="none" stroke="#c8a020" stroke-width=".8"/>
+          <!-- 별 -->
+          <text x="124" y="205" font-size="4" fill="#fff" text-anchor="middle" opacity=".9">★</text>
+        </g>
+
+        <!-- ── 러그/매트 (바닥 앞쪽) ── -->
+        <polygon points="108,278 148,257 175,272 135,293" fill="#1e2848" stroke="#27305a" stroke-width=".8" opacity=".8"/>
+        <!-- 러그 패턴 -->
+        <polygon points="120,274 138,265 151,272 133,281" fill="none" stroke="#2e3d6a" stroke-width=".7" opacity=".5"/>
+
+        <!-- ── 파티클 / 환경광 효과 ── -->
+        <circle cx="290" cy="130" r="1.5" fill="#F4C430" opacity=".25"/>
+        <circle cx="310" cy="145" r="1" fill="#4B96FF" opacity=".2"/>
+        <circle cx="150" cy="90" r="1.2" fill="#27D98A" opacity=".2"/>
+        <circle cx="130" cy="105" r="0.8" fill="#9D7FFF" opacity=".3"/>
+
+        <!-- ── 전면 테두리 그라디언트 (깊이감) ── -->
+        <defs>
+          <linearGradient id="vignette" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#060810" stop-opacity=".4"/>
+            <stop offset="40%" stop-color="#060810" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="340" fill="url(#vignette)" pointer-events="none"/>
+      </svg>
+    </div>
+
+    <!-- 아이소메트릭 레이블 안내 -->
+    <div style="display:flex;gap:8px;padding:8px 20px 2px;flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--tx3)">탭하면 아이템 정보 확인</span>
+      <span style="font-size:11px;color:var(--pur)">● 보라 테두리 = 장착중</span>
+      <span style="font-size:11px;color:var(--gld)">● 금색 빛 = 특별 보상</span>
+    </div>
+
+    <!-- 아이템 서랍 -->
+    <div class="item-draw" style="margin:8px 20px 0">
+      <div class="draw-tabs">
+        <div class="dtab on" onclick="dTab(this,'furn')">가구</div>
+        <div class="dtab" onclick="dTab(this,'deco')">벽 데코</div>
+        <div class="dtab" onclick="dTab(this,'spec')">특별 아이템</div>
+      </div>
+      <div class="item-grid" id="itemGrid">
+        <div class="ic eq" onclick="toast('기본 의자 — 현재 배치됨 ✓')"><div class="ic-em">🪑</div><div class="ic-nm">기본 의자</div></div>
+        <div class="ic eq" onclick="toast('책꽂이 — 현재 배치됨 ✓')"><div class="ic-em">📚</div><div class="ic-nm">영어 책꽂이</div></div>
+        <div class="ic eq" onclick="toast('스탠드 조명 — 현재 배치됨 ✓')"><div class="ic-em">💡</div><div class="ic-nm">스탠드</div></div>
+        <div class="ic locked"><div class="ic-em">🪞</div><div class="ic-nm">거울<br><small>Lv.5</small></div><span class="ic-lk">🔒</span></div>
+        <div class="ic" onclick="toast('소파 — 탭하면 방에 배치됩니다')"><div class="ic-em">🛋️</div><div class="ic-nm">소파</div></div>
+        <div class="ic locked"><div class="ic-em">🛏️</div><div class="ic-nm">침대<br><small>30일 연속</small></div><span class="ic-lk">🔒</span></div>
+        <div class="ic locked"><div class="ic-em">🖥️</div><div class="ic-nm">외장 모니터<br><small>Lv.7</small></div><span class="ic-lk">🔒</span></div>
+        <div class="ic locked"><div class="ic-em">🪴</div><div class="ic-nm">큰 화분<br><small>Lv.5</small></div><span class="ic-lk">🔒</span></div>
+      </div>
+    </div>
+
+    <!-- 잠금 해제 조건 안내 -->
+    <div style="margin:10px 20px 0;background:var(--s1);border:1px solid var(--b1);border-radius:var(--rs);padding:13px 15px">
+      <p style="font-size:12px;font-weight:700;color:var(--pur);margin-bottom:8px">🔒 다음 아이템을 해제하려면</p>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <p style="font-size:12px;color:var(--tx2)">🔑 언어 Lv.5 달성 → <strong style="color:var(--tx1)">거울</strong></p>
+        <p style="font-size:12px;color:var(--tx2)">🔑 30일 연속 학습 → <strong style="color:var(--tx1)">침대</strong></p>
+        <p style="font-size:12px;color:var(--tx2)">🔑 수리 Lv.7 달성 → <strong style="color:var(--tx1)">외장 모니터</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QUIZ (직무적성 3과목 통합) ═══ -->
+<div class="scr" id="quiz">
+  <div class="q-top">
+    <button class="qcl" onclick="go('home')">✕</button>
+    <div class="qpw"><div class="qpf lan" id="qpf" style="width:20%"></div></div>
+    <div class="q-hearts"><span class="ht" id="h1">❤️</span><span class="ht" id="h2">❤️</span><span class="ht" id="h3">❤️</span></div>
+  </div>
+  <!-- 과목 탭 -->
+  <div class="q-subj-tabs" id="qSTabs">
+    <div class="q-stab lan on" onclick="pickSubj('lan')">🔤 언어</div>
+    <div class="q-stab num" onclick="pickSubj('num')">🔢 수리</div>
+    <div class="q-stab rea" onclick="pickSubj('rea')">🔀 추리</div>
+  </div>
+  <div class="q-badge" id="qBadge">🔤 언어 (Language) · 문제 <span id="qN">1</span>/3</div>
+  <div class="q-card"><div class="q-type lan" id="qType">명제 추론</div><p class="q-text" id="qTxt"></p></div>
+  <div class="q-pass" id="qPass" style="display:none"></div>
+  <div class="q-opts" id="qOpts"></div>
+  <div class="rbanner" id="rb"><p class="rb-t" id="rb-t"></p><p class="rb-b" id="rb-b"></p></div>
+  <div class="q-foot"><button class="qsub lan" id="qsub" disabled onclick="submitQ()">확인</button></div>
+</div>
+
+<!-- ═══ COMPLETE ═══ -->
+<div class="scr" id="complete">
+  <div class="comp-em" id="compEm">🎉</div>
+  <h2 class="comp-t" id="compT">학습 완료!</h2>
+  <p class="comp-s" id="compS">오늘의 직무적성 세션을 마쳤어요</p>
+  <div class="xpc">
+    <div class="xpr"><span class="xpl">기본 XP</span><span class="xpv">+30 XP</span></div>
+    <div class="xpr"><span class="xpl" id="xpBonusLbl">정확도 보너스</span><span class="xpv" id="xpBonusVal">+15 XP</span></div>
+    <div class="xpr"><span class="xpl">🔥 스트릭 보너스 (7일)</span><span class="xpv">+10 XP</span></div>
+    <div class="xpr" style="border-top:1px solid var(--b1);padding-top:9px;margin-top:3px"><span style="font-weight:700;color:var(--tx1)">총 획득 XP</span><span class="xpv" style="font-size:18px">+55 XP</span></div>
+  </div>
+  <button class="comp-cta" onclick="go('home')">홈으로 돌아가기</button>
+  <button class="comp-sec" onclick="go('my')">🌿 잔디 확인하기</button>
+</div>
+
+<!-- tooltip -->
+<div class="g-tip" id="gTip"></div>
+<!-- unlock toast -->
+<div class="unlock-toast" id="uToast"></div>
+
+<script>
+// ─── 기본 네비게이션 ───
+let obIdx=0;
+function nextOb(){obIdx++;document.getElementById('ob-slides').style.transform=`translateX(-${obIdx*100}vw)`;}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);}
+function nav(btn){btn.closest('.nav').querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function ltab(tab,m){document.querySelectorAll('.lt').forEach(t=>t.classList.remove('on'));tab.classList.add('on');document.getElementById('freeTab').style.display=m==='free'?'block':'none';document.getElementById('premTab').style.display=m==='prem'?'block':'none';}
+function cFilter(tab){document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('on'));tab.classList.add('on');}
+function dTab(tab,mode){document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('on'));tab.classList.add('on');}
+
+// toast
+function toast(msg){const t=document.getElementById('uToast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function shareGarden(){toast('잔디 링크가 클립보드에 복사됐어요! 📋');}
+
+// isometric item tooltip
+function isoTip(e, name, desc){
+  e.stopPropagation();
+  const tip = document.getElementById('isoTip');
+  tip.innerHTML = `<span style="color:var(--grn);font-weight:700">${name}</span><br><span style="color:var(--tx2);font-size:11px">${desc}</span>`;
+  const wrap = document.querySelector('.iso-wrap');
+  const wRect = wrap.getBoundingClientRect();
+  let cx = e.clientX - wRect.left;
+  let cy = e.clientY - wRect.top;
+  tip.classList.remove('show');
+  tip.style.left = '0px'; tip.style.top = '0px';
+  requestAnimationFrame(() => {
+    const tw = tip.offsetWidth || 160;
+    const th = tip.offsetHeight || 44;
+    tip.style.left = Math.min(cx, wRect.width - tw - 8) + 'px';
+    tip.style.top = Math.max(cy - th - 12, 4) + 'px';
+    tip.classList.add('show');
+    clearTimeout(tip._t);
+    tip._t = setTimeout(() => tip.classList.remove('show'), 2000);
+  });
+}
+
+// ─── Activity Garden 잔디 생성 ───
+function buildGarden(){
+  const g=document.getElementById('gardenGrid');
+  if(!g||g.children.length>0)return;
+  const WEEKS=52,DAYS=7,total=WEEKS*DAYS;
+  // 시드 랜덤 — 재현 가능한 패턴
+  const seed=data=>{ let h=5381; for(let c of data+''){h=((h<<5)+h)+c.charCodeAt(0)|0;} return h; };
+  for(let i=0;i<total;i++){
+    const daysAgo=total-1-i;
+    let lvl=0;
+    if(daysAgo<7)lvl=Math.abs(seed(i*7))%2===0?4:3;
+    else if(daysAgo<43){const r=Math.abs(seed(i*3))%10;lvl=r>6?3:r>3?2:r>0?1:0;}
+    else{lvl=Math.abs(seed(i))%12===0?1:0;}
+    const el=document.createElement('div');
+    el.className=`gc l${lvl}`;
+    const dateStr=`D-${daysAgo}`;
+    const xp=[0,12,35,68,110][lvl];
+    el.setAttribute('data-tip',daysAgo===0?`오늘 · ${xp} XP`:`${dateStr} · ${xp||0} XP · ${lvl>0?'직무적성+영어 학습 완료':'학습 없음'}`);
+    el.addEventListener('click',function(e){
+      const tip=document.getElementById('gTip');
+      tip.innerHTML=`<strong>${this.dataset.tip}</strong>`;
+      tip.style.display='block';
+      const r=this.getBoundingClientRect();
+      tip.style.left=Math.min(r.left,window.innerWidth-230)+'px';
+      tip.style.top=(r.bottom+6)+'px';
+      setTimeout(()=>tip.style.display='none',1800);
+    });
+    g.appendChild(el);
+  }
+}
+
+// ─── ENGLISH STORY 5단계 ───
+const STORY={
+  label:'📧 비즈니스 이메일',
+  title:'Rescheduling a Client Meeting',
+  text:`Alex is a junior analyst at a Seoul investment bank. His manager, Ms. Park, asks him to <span class="hl-word" onclick="wPop('reschedule','to arrange for a different time')">reschedule</span> an important client meeting from Tuesday to Thursday. The client, Mr. Kim, is a key <span class="hl-word" onclick="wPop('investor','a person who puts money into a business to gain profit')">investor</span>. Alex must write a <span class="hl-word" onclick="wPop('professional','polite, skilled, and appropriate for work')">professional</span> and <span class="hl-word" onclick="wPop('concise','brief and clear, using few words')">concise</span> email.`,
+  vocabQ:[
+    {word:'reschedule',defs:['to arrange for a different time','to cancel permanently','to send a payment','to ignore a deadline'],ans:0},
+    {word:'concise',defs:['very long and detailed','brief and clear','loud and emotional','uncertain and vague'],ans:1},
+  ],
+  blankQ:{
+    sent:'I am writing to _____ our meeting originally scheduled for Tuesday.',
+    opts:['reschedule','cancel','approve','confirm'],
+    ans:0,
+    exp:'reschedule은 "다른 시간으로 일정을 변경한다"는 의미로, 이 문맥에서 가장 적합한 표현입니다.'
+  },
+  listenSent:'I am writing to reschedule our meeting to Thursday.',
+  listenWords:['writing','reschedule','am','to','our','I','meeting','to','Thursday'],
+  speakSent:'I hope this new time works for you.',
+  writeSit:'Mr. Kim replied and confirmed the new Thursday meeting. Write a short thank-you reply to him. (Use 10 or more words)',
+};
+
+let esStep=0,vSelW=null,vSelD=null,vMatched=0;
+let arrangeAns=[],wbWords=[];
+let micRec=false;
+
+function wPop(w,d){toast(`${w}: ${d}`);}
+function startEng(){esStep=0;vSelW=null;vSelD=null;vMatched=0;arrangeAns=[];go('eng');renderStep();}
+
+function renderStep(){
+  const pct=(esStep/5)*100;
+  document.getElementById('engPb').style.width=pct+'%';
+  document.getElementById('engSl').textContent=`STEP ${esStep+1} / 5`;
+  const dots=document.querySelectorAll('.step-dot');
+  dots.forEach((d,i)=>{d.className='step-dot'+(i===esStep?' on':(i<esStep?' dn':''));});
+  const body=document.getElementById('engBody');
+  const cta=document.getElementById('engCta');
+  cta.disabled=false;
+  cta.textContent=esStep<4?'다음 ›':'🎉 세션 완료';
+  cta.onclick=engNext;
+
+  if(esStep===0){
+    // STEP 1: 읽기
+    body.innerHTML=`
+      <div class="story-card">
+        <p class="story-label">${STORY.label}</p>
+        <p class="story-title">${STORY.title}</p>
+        <p class="story-text">${STORY.text}</p>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--tx3);padding:8px 20px">초록 단어를 탭하면 뜻을 볼 수 있어요</p>`;
+  }
+  else if(esStep===1){
+    // STEP 2: 어휘 (매칭 + 빈칸)
+    const q=STORY.vocabQ;
+    const shuffled=[...q[1].defs].sort(()=>Math.random()-.5);
+    body.innerHTML=`
+      <p class="vocab-hint">단어와 알맞은 뜻을 탭하여 연결하세요</p>
+      <div class="vocab-area">
+        ${q.map((item,i)=>`
+          <div class="v-row">
+            <div class="v-w" id="vw${i}" onclick="vPickW(${i})">${item.word}</div>
+            <span class="v-arr">→</span>
+            <div class="v-d" id="vd${i}" onclick="vPickD(${i})">${shuffled[i]}</div>
+          </div>`).join('')}
+      </div>
+      <div style="margin:14px 20px 0;height:1px;background:var(--b1)"></div>
+      <div style="padding:12px 20px 0">
+        <p style="font-size:12px;color:var(--tx2);margin-bottom:10px;text-align:center">또는 문장의 빈칸을 채우세요</p>
+        <div class="blank-sent">${STORY.blankQ.sent.replace('_____','<span class="blank" id="blankFill">_____</span>')}</div>
+        <div class="blank-opts" id="blankOpts">
+          ${STORY.blankQ.opts.map((o,i)=>`<div class="blank-opt" onclick="pickBlank(this,${i})">${o}</div>`).join('')}
+        </div>
+      </div>`;
+    cta.disabled=true;
+    vMatched=0;vSelW=null;vSelD=null;
+  }
+  else if(esStep===2){
+    // STEP 3: 듣기 (단어 배열)
+    wbWords=[...STORY.listenWords].sort(()=>Math.random()-.5);
+    arrangeAns=[];
+    body.innerHTML=`
+      <p style="font-size:13px;font-weight:700;text-align:center;padding:6px 20px 4px;color:var(--tx2)">문장을 듣고 올바른 어순으로 배열하세요</p>
+      <button class="play-btn" onclick="playAudio()">🔊 문장 듣기</button>
+      <button class="play-btn slow" style="display:block;margin:0 auto 10px" onclick="playAudio('slow')">🐢 느리게 듣기 (0.75×)</button>
+      <p style="font-size:11px;color:var(--tx3);padding:0 20px 6px">완성 문장:</p>
+      <div class="slots" id="slots"></div>
+      <p style="font-size:11px;color:var(--tx3);padding:0 20px 5px">단어 카드:</p>
+      <div class="wbank" id="wbank">
+        ${wbWords.map((w,i)=>`<div class="wc" id="wb${i}" onclick="placeWord('${w}',${i})">${w}</div>`).join('')}
+      </div>`;
+    cta.disabled=true;
+  }
+  else if(esStep===3){
+    // STEP 4: 말하기
+    body.innerHTML=`
+      <p style="font-size:13px;font-weight:700;text-align:center;padding:8px 20px 5px">문장을 듣고 똑같이 따라 말하세요</p>
+      <div class="speak-txt">"${STORY.speakSent}"</div>
+      <button class="play-btn" onclick="playAudio()" style="margin-top:8px">🔊 다시 듣기</button>
+      <div class="mic-area">
+        <div class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</div>
+        <p class="mic-score" id="micScore">마이크 버튼을 눌러 따라 말하세요</p>
+        <p class="skip-txt" onclick="skipSpeak()">지금은 말하기 어려운 환경이에요 → 건너뛰기</p>
+      </div>`;
+    cta.disabled=true;
+  }
+  else if(esStep===4){
+    // STEP 5: 쓰기
+    body.innerHTML=`
+      <div class="write-sit">
+        <p class="ws-lbl">✍️ 상황</p>
+        <p class="ws-txt">${STORY.writeSit}</p>
+      </div>
+      <div class="write-box">
+        <textarea id="writeTA" placeholder="여기에 영어 문장을 작성하세요..." oninput="wCount(this)" rows="4"></textarea>
+      </div>
+      <p class="wc-count" id="wcnt">0 / 10단어 이상 작성</p>
+      <div class="write-fb" id="writeFb">
+        <p class="wfb-t">✅ AI 채점 결과</p>
+        <p class="wfb-b" id="wfbBody"></p>
+      </div>`;
+    cta.disabled=true;
+    cta.textContent='AI 채점하기';
+    cta.onclick=checkWrite;
+  }
+}
+
+function engNext(){
+  if(esStep>=4){
+    document.getElementById('compEm').textContent='📖';
+    document.getElementById('compT').textContent='영어 세션 완료!';
+    document.getElementById('compS').textContent='스토리 5단계를 모두 완주했어요';
+    document.getElementById('xpBonusLbl').textContent='스토리 완주 보너스';
+    document.getElementById('xpBonusVal').textContent='+25 XP';
+    go('complete');return;
+  }
+  esStep++;renderStep();
+  document.getElementById('engBody').scrollTop=0;
+}
+
+function playAudio(mode){
+  const spd=mode==='slow'?'느린 속도(0.75×)':'';
+  toast(`🔊 ${spd} "${STORY.listenSent}"\n(실서비스: TTS/MP3 재생)`);
+}
+
+// vocab matching
+let vSelWIdx=null,vSelDIdx=null,blankDone=false;
+function vPickW(i){
+  vSelWIdx=i;
+  document.querySelectorAll('.v-w').forEach(e=>e.classList.remove('sel'));
+  document.getElementById('vw'+i).classList.add('sel');
+  checkVMatch();
+}
+function vPickD(i){
+  vSelDIdx=i;
+  document.querySelectorAll('.v-d').forEach(e=>e.classList.remove('sel'));
+  document.getElementById('vd'+i).classList.add('sel');
+  checkVMatch();
+}
+function checkVMatch(){
+  if(vSelWIdx===null||vSelDIdx===null)return;
+  // 데모: 항상 매칭 성공
+  document.getElementById('vw'+vSelWIdx).classList.replace('sel','ok');
+  document.getElementById('vd'+vSelDIdx).classList.replace('sel','ok');
+  vMatched++;vSelWIdx=null;vSelDIdx=null;
+  if(vMatched>=STORY.vocabQ.length&&blankDone)document.getElementById('engCta').disabled=false;
+}
+
+function pickBlank(el,idx){
+  document.querySelectorAll('.blank-opt').forEach(e=>e.classList.remove('sel','ok','ng'));
+  if(idx===STORY.blankQ.ans){
+    el.classList.add('ok');
+    document.getElementById('blankFill').textContent=STORY.blankQ.opts[idx];
+    blankDone=true;
+    if(vMatched>=STORY.vocabQ.length)document.getElementById('engCta').disabled=false;
+    else{blankDone=true;if(vMatched>=STORY.vocabQ.length)document.getElementById('engCta').disabled=false;}
+    // simplify: enable if blank done
+    blankDone=true;
+    if(vMatched>0||blankDone)document.getElementById('engCta').disabled=false;
+  } else {
+    el.classList.add('ng');el.classList.add('sel');
+    setTimeout(()=>el.classList.remove('ng','sel'),600);
+  }
+}
+
+// word arrange
+function placeWord(w,i){
+  arrangeAns.push({w,i});
+  document.getElementById('wb'+i).classList.add('used');
+  const slots=document.getElementById('slots');
+  const s=document.createElement('div');
+  s.className='slot';s.textContent=w;
+  s.onclick=()=>{
+    arrangeAns=arrangeAns.filter(x=>x.i!==i);
+    document.getElementById('wb'+i).classList.remove('used');
+    s.remove();
+    if(arrangeAns.length<5)document.getElementById('engCta').disabled=true;
+  };
+  slots.appendChild(s);
+  if(arrangeAns.length>=7)document.getElementById('engCta').disabled=false;
+}
+
+// mic
+function toggleMic(){
+  if(micRec){micRec=false;return;}
+  micRec=true;
+  const btn=document.getElementById('micBtn');
+  btn.classList.add('rec');
+  document.getElementById('micScore').textContent='🔴 녹음 중...';
+  setTimeout(()=>{
+    micRec=false;btn.classList.remove('rec');
+    const sc=65+Math.floor(Math.random()*30);
+    const ms=document.getElementById('micScore');
+    if(sc>=80){ms.innerHTML=`발음 일치율 <strong>${sc}%</strong> — 훌륭해요! 🎉`;}
+    else if(sc>=60){ms.innerHTML=`발음 일치율 <strong>${sc}%</strong> — 거의 다 됐어요!`;}
+    else{ms.innerHTML=`발음 일치율 <strong>${sc}%</strong> — 한 번 더 시도해보세요`;}
+    document.getElementById('engCta').disabled=false;
+  },2400);
+}
+function skipSpeak(){document.getElementById('micScore').textContent='건너뛰기 선택 — XP 일부 감소';document.getElementById('engCta').disabled=false;}
+
+// writing
+function wCount(ta){
+  const n=ta.value.trim().split(/\s+/).filter(w=>w).length;
+  const el=document.getElementById('wcnt');
+  el.textContent=`${n} / 10단어 이상 작성`;
+  el.className='wc-count'+(n>=10?' ok':'');
+}
+function checkWrite(){
+  const ta=document.getElementById('writeTA');
+  const n=ta.value.trim().split(/\s+/).filter(w=>w).length;
+  if(n<10){toast('10단어 이상 작성해주세요!');return;}
+  const fb=document.getElementById('writeFb');
+  fb.classList.add('on');
+  document.getElementById('wfbBody').textContent=`${n}단어 문장을 확인했어요.\n핵심 표현 포함 여부: ✓\n문법 자연스러움: 4/5점\n\n💡 개선 포인트: "Thank you for your confirmation." 같은 감사 표현을 앞에 쓰면 더 자연스러운 비즈니스 이메일이 됩니다.`;
+  const cta=document.getElementById('engCta');
+  cta.disabled=false;cta.textContent='🎉 세션 완료';cta.onclick=engNext;
+}
+
+// ─── QUIZ 직무적성 3과목 ───
+const QS={
+  lan:[
+    {type:'명제 추론',q:'다음 조건을 모두 만족할 때, 반드시 참인 것은?',pass:'• A가 참석하면 B도 참석한다.\n• C가 참석하면 D는 참석하지 않는다.\n• B가 참석하지 않으면 C가 참석한다.\n• D가 참석하지 않으면 E가 참석한다.',opts:['A→E 불참','B참→D참','A참→E참','C참→B참','D참→A참'],ans:2,exp:'A→B→(B불참이면C)의 대우 적용: A→B→C→D불참→E참. ③이 항상 참.'},
+    {type:'어휘 유추',q:'다음 단어 쌍의 관계가 나머지와 다른 하나는?',pass:'① 의사:환자  ② 교사:학생  ③ 부모:자녀  ④ 변호사:피의자  ⑤ 하늘:구름',opts:['①','②','③','④','⑤'],ans:4,exp:'①②③④는 모두 사람-사람 관계(전문직-대상)이지만, ⑤는 자연물-자연물 관계입니다.'},
+    {type:'독해 추론',q:'다음 글의 주제로 가장 알맞은 것은?',pass:'"ESG 경영은 단순한 비용이 아닌 장기적 기업 가치를 높이는 전략이다. 환경·사회·지배구조를 고려한 기업은 투자자 신뢰와 소비자 충성도를 동시에 확보한다."',opts:['ESG 비용 절감 방법','ESG 경영의 전략적 가치','기업의 환경 오염 사례','소비자 충성도 하락 이유','투자자 유치 단기 전략'],ans:1,exp:'지문은 ESG 경영이 비용이 아닌 장기 가치 창출 전략임을 주장합니다.'},
+  ],
+  num:[
+    {type:'자료 해석',q:'2023년 전년 대비 성장률이 가장 높은 부문은?',pass:'• A부문: 2022년 200억 → 2023년 260억\n• B부문: 2022년 150억 → 2023년 180억\n• C부문: 2022년 300억 → 2023년 345억\n• D부문: 2022년 80억 → 2023년 112억',opts:['A (30%)','B (20%)','C (15%)','D (40%)','모두 동일'],ans:3,exp:'D: (112-80)/80×100=40%로 가장 높습니다.'},
+    {type:'수 추리',q:'다음 수열의 빈칸에 알맞은 수는?',pass:'3, 9, 27, 81, ___',opts:['162','243','189','324','270'],ans:1,exp:'3을 곱하는 등비수열: 81×3=243.'},
+    {type:'응용 계산',q:'8명이 40시간에 완성하는 작업을 5명이 하면 몇 시간 걸리나?',pass:'',opts:['52시간','60시간','64시간','68시간','72시간'],ans:2,exp:'총 작업량 = 8×40=320 맨시간. 5명으로 320÷5=64시간.'},
+  ],
+  rea:[
+    {type:'도형 패턴',q:'다음 수열의 물음표(?)에 알맞은 수는?',pass:'2, 6, 18, 54, ?',opts:['108','162','144','216','180'],ans:1,exp:'×3 등비수열: 54×3=162.'},
+    {type:'규칙 추리',q:'다음 배열의 빈칸에 들어갈 수는?  1, 4, 9, 16, 25, ___',pass:'',opts:['30','36','42','49','35'],ans:1,exp:'1²=1, 2²=4, 3²=9, 4²=16, 5²=25, 6²=36. 제곱수 수열입니다.'},
+    {type:'조건 추리',q:'5개 팀이 A~E를 리그전으로 경기할 때 총 경기 수는?',pass:'※ 리그전: 모든 팀이 서로 한 번씩 대결',opts:['8경기','10경기','12경기','15경기','20경기'],ans:1,exp:'C(5,2)=5×4÷2=10경기.'},
+  ],
+};
+const SUBJINFO={lan:{label:'🔤 언어 (Language)',cls:'lan'},num:{label:'🔢 수리 (Numeracy)',cls:'num'},rea:{label:'🔀 추리 (Reasoning)',cls:'rea'}};
+
+let curSubj='lan',curQ=0,selOpt=null,isCorr=false,answered=false;
+
+function startQuiz(subj='lan'){curSubj=subj;curQ=0;selOpt=null;answered=false;
+  ['h1','h2','h3'].forEach(id=>document.getElementById(id).className='ht');
+  updateSubjTabs();loadQ();go('quiz');}
+
+function pickSubj(s){curSubj=s;curQ=0;selOpt=null;answered=false;
+  ['h1','h2','h3'].forEach(id=>document.getElementById(id).className='ht');
+  updateSubjTabs();loadQ();}
+
+function updateSubjTabs(){
+  document.querySelectorAll('.q-stab').forEach(t=>{
+    t.className='q-stab '+t.getAttribute('onclick').match(/'(\w+)'/)[1];
+  });
+  document.querySelector(`.q-stab.${curSubj}`).classList.add('on');
+  const pf=document.getElementById('qpf');
+  pf.className=`qpf ${curSubj}`;
+  document.getElementById('qsub').className=`qsub ${curSubj}`;
+}
+
+function loadQ(){
+  const qs=QS[curSubj];const q=qs[curQ];const si=SUBJINFO[curSubj];
+  document.getElementById('qBadge').innerHTML=`${si.label} · 문제 <span id="qN">${curQ+1}</span>/${qs.length}`;
+  document.getElementById('qType').textContent=q.type;
+  document.getElementById('qType').className=`q-type ${curSubj}`;
+  document.getElementById('qTxt').textContent=q.q;
+  const pass=document.getElementById('qPass');
+  if(q.pass){pass.style.display='block';pass.innerHTML=q.pass.replace(/\n/g,'<br>');}
+  else{pass.style.display='none';}
+  const nums=['①','②','③','④','⑤'];
+  document.getElementById('qOpts').innerHTML=q.opts.map((o,i)=>
+    `<button class="opt" onclick="pickOpt(this,${i===q.ans})"><span class="onum">${nums[i]}</span>${o}</button>`
+  ).join('');
+  document.getElementById('rb').className='rbanner';
+  const sb=document.getElementById('qsub');sb.disabled=true;sb.textContent='확인';sb.onclick=submitQ;
+  document.getElementById('qpf').style.width=((curQ+1)/qs.length*100)+'%';
+  answered=false;selOpt=null;
+}
+
+function pickOpt(btn,corr){
+  if(answered)return;
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel','lan','num','rea'));
+  btn.classList.add('sel',curSubj);
+  selOpt=btn;isCorr=corr;
+  document.getElementById('qsub').disabled=false;
+}
+
+function submitQ(){
+  if(!selOpt||answered)return;answered=true;
+  const q=QS[curSubj][curQ];const rb=document.getElementById('rb');
+  if(isCorr){selOpt.classList.replace('sel','correct');rb.className='rbanner ok';document.getElementById('rb-t').textContent='✅ 정답입니다!';}
+  else{
+    selOpt.classList.replace('sel','wrong');
+    document.querySelectorAll('.opt').forEach((b,i)=>{if(i===q.ans)b.classList.add('correct');});
+    rb.className='rbanner ng';document.getElementById('rb-t').textContent='❌ 틀렸습니다';
+    const lost=document.querySelectorAll('.ht.lost').length;
+    if(lost<3)document.getElementById(['h3','h2','h1'][lost]).className='ht lost';
+  }
+  document.getElementById('rb-b').textContent=q.exp;
+  const sb=document.getElementById('qsub');
+  sb.textContent=curQ<QS[curSubj].length-1?'다음 문제 →':'결과 보기';sb.onclick=nextQ;
+}
+
+function nextQ(){
+  curQ++;
+  if(curQ>=QS[curSubj].length){
+    const si=SUBJINFO[curSubj];
+    document.getElementById('compEm').textContent='🎉';
+    document.getElementById('compT').textContent=si.label.split(' ')[1]+' 세션 완료!';
+    document.getElementById('compS').textContent=`${QS[curSubj].length}문제를 모두 풀었어요`;
+    document.getElementById('xpBonusLbl').textContent='정확도 보너스';
+    document.getElementById('xpBonusVal').textContent='+15 XP';
+    go('complete');return;
+  }
+  loadQ();document.getElementById('qsub').onclick=submitQ;
+}
+
+// ─── 초기화 ───
+window.addEventListener('load',()=>{buildGarden();});
+</script>
+</body>
+</html>
