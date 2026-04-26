@@ -172,6 +172,14 @@
           <line x1="183" y1="223" x2="188" y2="220" stroke="#aaa080" stroke-width=".5" opacity=".4"/>
         </g>
 
+        
+        <!-- ── 소파 ── -->
+        <g id="sofa" class="iso-item" style="display:none" onclick="isoTip(event,'소파 🛋️','휴식을 위한 소파')" filter="url(#shadow)">
+          <polygon points="120,250 140,240 155,250 135,260" fill="#cc4444" stroke="#aa3333" stroke-width="1"/>
+          <polygon points="120,250 120,265 135,275 135,260" fill="#aa3333" stroke="#882222" stroke-width="1"/>
+          <polygon points="135,260 155,250 155,265 135,275" fill="#882222" stroke="#aa3333" stroke-width="1"/>
+        </g>
+
         <!-- ── 바닥 매트 ── -->
         <polygon points="140,258 185,235 215,250 170,273" fill="#1e2848" stroke="#252d52" stroke-width=".8" opacity=".7"/>
 
@@ -361,11 +369,11 @@
         <div class="dtab" onclick="dTab(this,'spec')">특별 아이템</div>
       </div>
       <div class="item-grid" id="itemGrid">
-        <div class="ic eq" onclick="toast('기본 의자 — 현재 배치됨 ✓')"><div class="ic-em">🪑</div><div class="ic-nm">기본 의자</div></div>
-        <div class="ic eq" onclick="toast('책꽂이 — 현재 배치됨 ✓')"><div class="ic-em">📚</div><div class="ic-nm">영어 책꽂이</div></div>
-        <div class="ic eq" onclick="toast('스탠드 조명 — 현재 배치됨 ✓')"><div class="ic-em">💡</div><div class="ic-nm">스탠드</div></div>
+        <div class="ic eq" onclick="toggleRoomItem('chair', this)"><div class="ic-em">🪑</div><div class="ic-nm">기본 의자</div></div>
+        <div class="ic eq" onclick="toggleRoomItem('bookshelf', this)"><div class="ic-em">📚</div><div class="ic-nm">영어 책꽂이</div></div>
+        <div class="ic eq" onclick="toggleRoomItem('lamp', this)"><div class="ic-em">💡</div><div class="ic-nm">스탠드</div></div>
         <div class="ic locked"><div class="ic-em">🪞</div><div class="ic-nm">거울<br><small>Lv.5</small></div><span class="ic-lk">🔒</span></div>
-        <div class="ic" onclick="toast('소파 — 탭하면 방에 배치됩니다')"><div class="ic-em">🛋️</div><div class="ic-nm">소파</div></div>
+        <div class="ic" onclick="toggleRoomItem('sofa', this)"><div class="ic-em">🛋️</div><div class="ic-nm">소파</div></div>
         <div class="ic locked"><div class="ic-em">🛏️</div><div class="ic-nm">침대<br><small>30일 연속</small></div><span class="ic-lk">🔒</span></div>
         <div class="ic locked"><div class="ic-em">🖥️</div><div class="ic-nm">외장 모니터<br><small>Lv.7</small></div><span class="ic-lk">🔒</span></div>
         <div class="ic locked"><div class="ic-em">🪴</div><div class="ic-nm">큰 화분<br><small>Lv.5</small></div><span class="ic-lk">🔒</span></div>

@@ -418,3 +418,10 @@ body{background:var(--bg);color:var(--tx1);font-family:'Noto Sans KR',sans-serif
 @keyframes fadeUp{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
 .fu{animation:fadeUp .36s ease both}
 .d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}.d5{animation-delay:.25s}
+
+.q-stab.it{border-color:var(--tx2);color:var(--tx2);background:var(--s2)}
+.q-stab.it.on{background:var(--tx2);color:#071C10!important}
+.qpf.it{background:var(--tx2)}
+.qsub.it{background:var(--tx2);color:#fff}
+.q-type.it{color:var(--tx2)}
+.opt.sel.it{border-color:var(--tx2);background:var(--s2)}

@@ -314,13 +314,19 @@ const QS={
     {type:'수 추리',q:'다음 수열의 빈칸에 알맞은 수는?',pass:'3, 9, 27, 81, ___',opts:['162','243','189','324','270'],ans:1,exp:'3을 곱하는 등비수열: 81×3=243.'},
     {type:'응용 계산',q:'8명이 40시간에 완성하는 작업을 5명이 하면 몇 시간 걸리나?',pass:'',opts:['52시간','60시간','64시간','68시간','72시간'],ans:2,exp:'총 작업량 = 8×40=320 맨시간. 5명으로 320÷5=64시간.'},
   ],
+  
+  it:[
+    {type:'클라우드 기초',q:'SaaS(Software as a Service)의 올바른 설명은?',pass:'',opts:['인프라만 제공','플랫폼만 제공','소프트웨어를 웹에서 바로 사용','네트워크 장비 대여','서버 공간 임대'],ans:2,exp:'SaaS는 소프트웨어를 설치하지 않고 웹 등에서 서비스 형태로 바로 사용하는 모델입니다.'},
+    {type:'AI 기초',q:'생성형 AI(Generative AI)의 대표적인 사례가 아닌 것은?',pass:'',opts:['ChatGPT','Midjourney','DALL-E','일반 계산기','Sora'],ans:3,exp:'일반 계산기는 정해진 수식 연산만 수행하며 새로운 콘텐츠를 생성하지 않습니다.'},
+    {type:'데이터 보안',q:'다음 중 데이터 암호화 통신 프로토콜은?',pass:'',opts:['HTTP','FTP','HTTPS','SMTP','TELNET'],ans:2,exp:'HTTPS는 HTTP에 보안 계층(SSL/TLS)을 추가하여 데이터를 암호화합니다.'},
+  ],
   rea:[
     {type:'도형 패턴',q:'다음 수열의 물음표(?)에 알맞은 수는?',pass:'2, 6, 18, 54, ?',opts:['108','162','144','216','180'],ans:1,exp:'×3 등비수열: 54×3=162.'},
     {type:'규칙 추리',q:'다음 배열의 빈칸에 들어갈 수는?  1, 4, 9, 16, 25, ___',pass:'',opts:['30','36','42','49','35'],ans:1,exp:'1²=1, 2²=4, 3²=9, 4²=16, 5²=25, 6²=36. 제곱수 수열입니다.'},
     {type:'조건 추리',q:'5개 팀이 A~E를 리그전으로 경기할 때 총 경기 수는?',pass:'※ 리그전: 모든 팀이 서로 한 번씩 대결',opts:['8경기','10경기','12경기','15경기','20경기'],ans:1,exp:'C(5,2)=5×4÷2=10경기.'},
   ],
 };
-const SUBJINFO={lan:{label:'🔤 언어 (Language)',cls:'lan'},num:{label:'🔢 수리 (Numeracy)',cls:'num'},rea:{label:'🔀 추리 (Reasoning)',cls:'rea'}};
+const SUBJINFO={lan:{label:'🔤 언어 (Language)',cls:'lan'},num:{label:'🔢 수리 (Numeracy)',cls:'num'},rea:{label:'🔀 추리 (Reasoning)',cls:'rea'},it:{label:'💻 IT 상식 (IT Knowledge)',cls:'it'},};
 
 let curSubj='lan',curQ=0,selOpt=null,isCorr=false,answered=false;
 
@@ -401,3 +407,18 @@ function nextQ(){
 
 // ─── 초기화 ───
 window.addEventListener('load',()=>{buildGarden();});
+
+// Room Item Toggle
+function toggleRoomItem(itemId, btn) {
+    const el = document.getElementById(itemId);
+    if (!el) return;
+    if (el.style.display === 'none' || el.style.display === '') {
+        el.style.display = 'block';
+        btn.classList.add('eq');
+        toast('아이템을 방에 배치했습니다!');
+    } else {
+        el.style.display = 'none';
+        btn.classList.remove('eq');
+        toast('아이템을 숨겼습니다.');
+    }
+}
